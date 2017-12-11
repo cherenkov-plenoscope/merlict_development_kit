@@ -5,7 +5,7 @@
 //---------------------------------
 // included dependencies
 #include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
+#include "pybind11/stl.h"    // for automagic conversion of stl types
 #include "Core/Vec3.h"
 #include "Core/Rot3.h"
 #include "Core/Ray.h"
