@@ -5,6 +5,7 @@
 //---------------------------------
 // included dependencies
 #include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 #include "Core/Vec3.h"
 #include "Core/Rot3.h"
 #include "Core/Ray.h"
@@ -29,10 +30,12 @@
 #include "Scenery/Primitive/SphereCapWithCylinderBound.h"
 #include "Scenery/Primitive/SphereCapWithHexagonalBound.h"
 #include "Scenery/Primitive/SphereCapWithRectangularBound.h"
+#include "PhotonSensor/Sensor.h"
 //---------------------------------
 
 using Function::Func1D;
 using Function::Limits;
+using PhotonSensor::Sensor;
 
 PYBIND11_MODULE(mctPy, module) {
     module.doc() = "mctracer Python bindings";  // optional module docstring
@@ -224,5 +227,12 @@ PYBIND11_MODULE(mctPy, module) {
 
 // --------------------- primitives end ------------------------
 
+    pybind11::class_<Sensor>(module, "Sensor")
+        .def(pybind11::init<unsigned int, const Frame*>(),
+            pybind11::arg("_id"), pybind11::arg("_sensor_frame"))
+        .def("assign_photon_to_this_sensor", &Sensor::assign_photon_to_this_sensor,
+            pybind11::arg("photon"))
+        .def("clear_history", &Sensor::clear_history)
+        .def("get_arrival_table", &Sensor::get_arrival_table)
+        .def("get_arrival_table_header", &Sensor::get_arrival_table_header);
 }
-
