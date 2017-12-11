@@ -60,6 +60,12 @@ include_directories(/usr/include)
 include_directories(/usr/local/include)
 target_link_libraries(mct ${OpenCV_LIBS})
 
+#---------------------------------
+# Python bindings 
+add_subdirectory (Pybind11)
+add_subdirectory (Bindings)
+pybind11_add_module(mctPy ${SOURCE} ${PYBIND11_SOURCE})
+
 #---------
 # Show exe
 add_executable(mctShow Main/Show.cpp)

@@ -1,0 +1,4 @@
+set(PYBIND11_SOURCE
+    ${CMAKE_CURRENT_SOURCE_DIR}/Bindings.cpp
+    PARENT_SCOPE
+)
