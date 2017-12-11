@@ -33,5 +33,5 @@ PYBIND11_MODULE(mctPy, module) {
     pybind11::class_<Vec3>(module, "Vec3")
         .def(pybind11::init<const double, const double, const double>())
         .def("set", &Vec3::set)
-        .def("str", &Vec3::str);
+        .def("__repr__", &Vec3::str);
 }

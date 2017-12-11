@@ -62,9 +62,13 @@ target_link_libraries(mct ${OpenCV_LIBS})
 
 #---------------------------------
 # Python bindings 
-add_subdirectory (Pybind11)
 add_subdirectory (Bindings)
-pybind11_add_module(mctPy ${SOURCE} ${PYBIND11_SOURCE})
+add_subdirectory (Pybind11)
+
+add_library(mctPy MODULE ${PYBIND11_SOURCE} ${SOURCE})
+target_link_libraries(mctPy PRIVATE pybind11::module mct)
+set_target_properties(mctPy PROPERTIES PREFIX "${PYTHON_MODULE_PREFIX}"
+                                         SUFFIX "${PYTHON_MODULE_EXTENSION}")
 
 #---------
 # Show exe
