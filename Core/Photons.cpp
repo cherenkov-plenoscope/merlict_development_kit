@@ -12,7 +12,7 @@ namespace Photons {
 
 string get_print(const vector<Photon> *photons) {
     stringstream out;
-    out << "Photon bunble "<< photons->size() << "\n";
+    out << "Photon bundle "<< photons->size() << "\n";
     for (const Photon &photon : *photons)
         out << photon.str() << "\n";
     return out.str();

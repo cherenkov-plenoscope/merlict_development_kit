@@ -11,8 +11,12 @@
 #include "Core/Ray.h"
 #include "Core/RayForPropagation.h"
 #include "Core/Photon.h"
+#include "Core/Photons.h"
 #include "Core/Frame.h"
 #include "Core/Color.h"
+#include "Core/PropagationConfig.h"
+#include "Core/Random/Generator.h"
+#include "Core/Random/Mt19937.h"
 #include "Core/Function/LimitsFunction.h"
 #include "Core/Function/Func1DFunction.h"
 #include "Scenery/Primitive/Triangle.h"
@@ -235,4 +239,87 @@ PYBIND11_MODULE(mctPy, module) {
         .def("clear_history", &Sensor::clear_history)
         .def("get_arrival_table", &Sensor::get_arrival_table)
         .def("get_arrival_table_header", &Sensor::get_arrival_table_header);
+
+// ----------------------- photons ------------------------------
+
+
+    pybind11::class_<PropagationConfig>(module, "PropagationConfig")
+        .def(pybind11::init<>())
+        .def_readwrite("max_number_of_interactions_per_photon", 
+            &PropagationConfig::max_number_of_interactions_per_photon)
+        .def_readwrite("use_multithread_when_possible", 
+            &PropagationConfig::use_multithread_when_possible);
+
+    pybind11::class_<Random::Generator>(module, "Random_Generator");
+    pybind11::class_<Random::Mt19937, Random::Generator>(module, "Random_Mt19937")
+        .def(pybind11::init<>())
+        .def(pybind11::init<const uint32_t>(), pybind11::arg("seed"))
+        .def("uniform", &Random::Mt19937::uniform)
+        .def("normal", &Random::Mt19937::normal, 
+            pybind11::arg("mean"), pybind11::arg("std_dev"))
+        .def("set_seed", &Random::Mt19937::set_seed,
+            pybind11::arg("seed"));
+
+    module.def("photons_get_print", &Photons::get_print,
+        "Get string explaining the photon bundle", pybind11::arg("photons"));
+    
+    module.def("propagate_photons_in_scenery_with_settings",
+        &Photons::propagate_photons_in_scenery_with_settings,
+        "Propagate list of photons in a scenery using the given settings",
+        pybind11::arg("photons"),
+        pybind11::arg("world"),
+        pybind11::arg("settings"),
+        pybind11::arg("prng"));
+
 }
+/*
+namespace Photons {
+
+// propagation
+void propagate_photons_in_scenery_with_settings(
+    std::vector<Photon> *photons,
+    const Frame *world,
+    const PropagationConfig *settings,
+    Random::Generator* prng);
+
+void propagate_photons_using_single_thread(
+    std::vector<Photon> *photons,
+    const Frame* world,
+    const PropagationConfig* settings,
+    Random::Generator* prng);
+
+void propagate_photons_using_multi_thread(
+    std::vector<Photon> *photons,
+    const Frame* world,
+    const PropagationConfig* settings);
+
+// In Out to raw matrix vec<vec<d>>
+// Can be given to AsciiIO to write/read to/from text file
+std::vector<Photon> raw_matrix2photons(
+    std::vector<std::vector<double> > raw_matrix);
+std::vector<std::vector<double> > photons2raw_matrix(
+    std::vector<Photon> *photons);
+std::vector<double> photon2raw_row(Photon* ph);
+Photon raw_row2photon(std::vector<double> &raw_row);
+void assert_raw_row_size_matches_photon(std::vector<double> &raw_row);
+
+namespace Source {
+
+std::vector<Photon> parallel_towards_z_from_xy_disc(
+    const double disc_radius,
+    const unsigned int number_of_photons);
+
+std::vector<Photon> point_like_towards_z_opening_angle_num_photons(
+    const double opening_angle,
+    const unsigned int number_of_photons);
+
+}  // namespace Source
+
+void transform_all_photons(const HomTra3 Trafo, std::vector<Photon> *photons);
+void transform_all_photons_multi_thread(
+    const HomTra3 Trafo,
+    std::vector<Photon> *photons
+);
+
+}  // namespace Photons
+#endif  // MCTRACER_CORE_PHOTONS_H_ */
