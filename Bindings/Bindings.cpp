@@ -35,11 +35,13 @@
 #include "Scenery/Primitive/SphereCapWithHexagonalBound.h"
 #include "Scenery/Primitive/SphereCapWithRectangularBound.h"
 #include "PhotonSensor/Sensor.h"
+
 //---------------------------------
 
 using Function::Func1D;
 using Function::Limits;
 using PhotonSensor::Sensor;
+
 
 PYBIND11_MODULE(mctPy, module) {
     module.doc() = "mctracer Python bindings";  // optional module docstring
@@ -304,35 +306,3 @@ PYBIND11_MODULE(mctPy, module) {
         pybind11::arg("photons"));
 
 }
-/*
-namespace Photons {
-
-std::vector<std::vector<double> > photons2raw_matrix(
-    std::vector<Photon> *photons);
-
-std::vector<double> photon2raw_row(Photon* ph);
-
-Photon raw_row2photon(std::vector<double> &raw_row);
-
-void assert_raw_row_size_matches_photon(std::vector<double> &raw_row);
-
-namespace Source {
-
-std::vector<Photon> parallel_towards_z_from_xy_disc(
-    const double disc_radius,
-    const unsigned int number_of_photons);
-
-std::vector<Photon> point_like_towards_z_opening_angle_num_photons(
-    const double opening_angle,
-    const unsigned int number_of_photons);
-
-}  // namespace Source
-
-void transform_all_photons(const HomTra3 Trafo, std::vector<Photon> *photons);
-void transform_all_photons_multi_thread(
-    const HomTra3 Trafo,
-    std::vector<Photon> *photons
-);
-
-}  // namespace Photons
-#endif  // MCTRACER_CORE_PHOTONS_H_ */
