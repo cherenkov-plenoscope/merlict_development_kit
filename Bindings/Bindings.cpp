@@ -271,36 +271,49 @@ PYBIND11_MODULE(mctPy, module) {
         pybind11::arg("settings"),
         pybind11::arg("prng"));
 
+    module.def("propagate_photons_using_single_thread",
+        &Photons::propagate_photons_using_single_thread,
+        "Propagate list of photons using a single thread",
+        pybind11::arg("photons"),
+        pybind11::arg("world"),
+        pybind11::arg("settings"),
+        pybind11::arg("prng"));
+
+    module.def("propagate_photons_using_multi_thread",
+        &Photons::propagate_photons_using_multi_thread,
+        "Propagate list of photons using multi threads",
+        pybind11::arg("photons"),
+        pybind11::arg("world"),
+        pybind11::arg("settings"));
+
+    module.def("propagate_photons_using_multi_thread",
+        &Photons::propagate_photons_using_multi_thread,
+        "Propagate list of photons using multi threads",
+        pybind11::arg("photons"),
+        pybind11::arg("world"),
+        pybind11::arg("settings"));
+
+    module.def("raw_matrix2photons",
+        &Photons::raw_matrix2photons,
+        "in raw matrix vec<vec<d>>, out list of photons",
+        pybind11::arg("raw_matrix"));
+
+    module.def("photons2raw_matrix",
+        &Photons::photons2raw_matrix,
+        "in list of photons, raw matrix list[list[doubles]] out",
+        pybind11::arg("photons"));
+
 }
 /*
 namespace Photons {
 
-// propagation
-void propagate_photons_in_scenery_with_settings(
-    std::vector<Photon> *photons,
-    const Frame *world,
-    const PropagationConfig *settings,
-    Random::Generator* prng);
-
-void propagate_photons_using_single_thread(
-    std::vector<Photon> *photons,
-    const Frame* world,
-    const PropagationConfig* settings,
-    Random::Generator* prng);
-
-void propagate_photons_using_multi_thread(
-    std::vector<Photon> *photons,
-    const Frame* world,
-    const PropagationConfig* settings);
-
-// In Out to raw matrix vec<vec<d>>
-// Can be given to AsciiIO to write/read to/from text file
-std::vector<Photon> raw_matrix2photons(
-    std::vector<std::vector<double> > raw_matrix);
 std::vector<std::vector<double> > photons2raw_matrix(
     std::vector<Photon> *photons);
+
 std::vector<double> photon2raw_row(Photon* ph);
+
 Photon raw_row2photon(std::vector<double> &raw_row);
+
 void assert_raw_row_size_matches_photon(std::vector<double> &raw_row);
 
 namespace Source {
