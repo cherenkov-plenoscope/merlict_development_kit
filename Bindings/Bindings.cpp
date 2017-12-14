@@ -19,6 +19,9 @@
 #include "Core/Random/Mt19937.h"
 #include "Core/Function/LimitsFunction.h"
 #include "Core/Function/Func1DFunction.h"
+#include "Core/Function/Polynom3Function.h"
+#include "Core/Function/LinInterpolFunction.h"
+#include "Core/Function/ConstantFunction.h"
 #include "Scenery/Primitive/Triangle.h"
 #include "Scenery/Primitive/Annulus.h"
 #include "Scenery/Primitive/BiConvexLens.h"
@@ -35,13 +38,18 @@
 #include "Scenery/Primitive/SphereCapWithHexagonalBound.h"
 #include "Scenery/Primitive/SphereCapWithRectangularBound.h"
 #include "PhotonSensor/Sensor.h"
+#include "PhotonSensor/Sensors.h"
 
 //---------------------------------
 
 using Function::Func1D;
 using Function::Limits;
-using PhotonSensor::Sensor;
+using Function::Polynom3;
+using Function::LinInterpol;
+using Function::Constant;
 
+using PhotonSensor::Sensor;
+using PhotonSensor::Sensors;
 
 PYBIND11_MODULE(mctPy, module) {
     module.doc() = "mctracer Python bindings";  // optional module docstring
@@ -90,13 +98,43 @@ PYBIND11_MODULE(mctPy, module) {
             pybind11::arg("_r"), pybind11::arg("_g"), pybind11::arg("_b"))
         .def("__repr__", &Color::str);
 
+// ------------------------------ functions -------------------------
+
+    pybind11::class_<Func1D>(module, "Func1D");
+    pybind11::class_<Limits>(module, "Limits")
+        .def(pybind11::init<const double, const double>(),
+            pybind11::arg("_lower"), pybind11::arg("_upper"))
+        .def("__repr__", &Limits::str);
+
+    pybind11::class_<Polynom3, Func1D>(module, "Polynom3")
+        .def(pybind11::init<
+            const double,
+            const double,
+            const double,
+            const double,
+            const Limits &>(),
+            pybind11::arg("a3"), pybind11::arg("a2"),
+            pybind11::arg("a1"), pybind11::arg("a0"),
+            pybind11::arg("limits"))
+        .def("__repr__", &Polynom3::str);
+
+    pybind11::class_<Constant, Func1D>(module, "Constant")
+        .def(pybind11::init<const double, const Limits &>(),
+            pybind11::arg("value"), pybind11::arg("limits"))
+        .def("__repr__", &Constant::str);
+
+    pybind11::class_<LinInterpol, Func1D>(module, "LinInterpol")
+        .def(pybind11::init<const std::vector<std::vector<double>> &>(),
+            pybind11::arg("two_column_xy"))
+        .def("__repr__", &LinInterpol::str);
+
     pybind11::class_<SurfaceEntity, Frame>(module, "SurfaceEntity")
         .def(pybind11::init<const std::string, const Vec3, const Rot3>(),
             pybind11::arg("name"), pybind11::arg("pos"), pybind11::arg("rot"))
         .def("set_outer_color", &SurfaceEntity::set_outer_color,
             pybind11::arg("color"))
         .def("set_inner_color", &SurfaceEntity::set_inner_color,
-            pybind11::arg("color"))/*
+            pybind11::arg("color"))
         .def("set_outer_reflection", &SurfaceEntity::set_outer_reflection,
             pybind11::arg("refl"))
         .def("set_inner_reflection", &SurfaceEntity::set_inner_reflection,
@@ -108,7 +146,7 @@ PYBIND11_MODULE(mctPy, module) {
         .def("set_outer_absorption", &SurfaceEntity::set_outer_absorption,
             pybind11::arg("absorp"))
         .def("set_inner_absorption", &SurfaceEntity::set_inner_absorption,
-            pybind11::arg("absorp"))*/
+            pybind11::arg("absorp"))
         .def("set_allowed_frames_to_propagate_to", &SurfaceEntity::set_allowed_frames_to_propagate_to,
             pybind11::arg("frame"))
         .def("take_boundary_layer_properties_from", &SurfaceEntity::take_boundary_layer_properties_from,
@@ -242,8 +280,12 @@ PYBIND11_MODULE(mctPy, module) {
         .def("get_arrival_table", &Sensor::get_arrival_table)
         .def("get_arrival_table_header", &Sensor::get_arrival_table_header);
 
-// ----------------------- photons ------------------------------
+    pybind11::class_<Sensors>(module, "Sensors")
+        .def(pybind11::init<std::vector<PhotonSensor::Sensor*> &>(),
+            pybind11::arg("sensors"))
+        .def("clear_history", &Sensors::clear_history);
 
+// ----------------------- photons ------------------------------
 
     pybind11::class_<PropagationConfig>(module, "PropagationConfig")
         .def(pybind11::init<>())
