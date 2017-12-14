@@ -59,7 +59,7 @@ std::string Vec2::str()const {
     return out.str();
 }
 
-double Vec2::get_angle_in_between_in_rad(const Vec2& that)const {
+double Vec2::angle_in_between(const Vec2& that)const {
     Vec2 this_normalized = *this/this->norm();
     Vec2 that_normalized = that/that.norm();
     return acos(this_normalized*that_normalized);

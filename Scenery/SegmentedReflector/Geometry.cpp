@@ -116,7 +116,7 @@ namespace SegmentedReflector {
 			focal_point_to_facet_pos.cross(Vec3::UNIT_Z);
 
 		double angle_between_unit_z_and_focal_point_to_mirror_pos =
-			Vec3::UNIT_Z.get_angle_in_between_in_rad(focal_point_to_facet_pos);
+			Vec3::UNIT_Z.angle_in_between(focal_point_to_facet_pos);
 
 		double rot_angle = 0.5*angle_between_unit_z_and_focal_point_to_mirror_pos;
 

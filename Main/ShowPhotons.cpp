@@ -12,6 +12,7 @@
 #include "Scenery/Scenery.h"
 using std::string;
 using std::cout;
+using std::array;
 
 string help_text() {
     std::stringstream out; 

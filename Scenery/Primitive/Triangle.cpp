@@ -41,7 +41,7 @@ void Triangle::set_normal_and_3_vertecies(
 
 		// transformation to make surface normal match z-axis
 		Vec3 rot_axis = Vec3::UNIT_Z.cross(normal);
-		double rotation_angle = Vec3::UNIT_Z.get_angle_in_between_in_rad(normal);
+		double rotation_angle = Vec3::UNIT_Z.angle_in_between(normal);
 
 		rot = Rot3(rot_axis, rotation_angle);
 

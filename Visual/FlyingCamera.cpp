@@ -326,16 +326,16 @@ string FlyingCamera::get_intersection_info_print(const Intersection intersec)con
 	
 	stringstream out;
 	out << "| Object: " << intersec.get_object()->get_path_in_tree_of_frames() << "\n";
-	out << "| Distance to first intersection: " << intersec.get_intersection_distance() << "m\n";
+	out << "| Distance to first intersection: " << intersec.distance_to_ray_support() << "m\n";
 	out << "|\n";
 	out << "| In frame of intersecting object\n";
-	out << "| | intesection point: " << intersec.get_intersection_vector_in_object_system().str() << "\n";
-	out << "| | surface normal   : " << intersec.get_surface_normal_in_object_system().str() << "\n";
+	out << "| | intesection point: " << intersec.position_in_object_frame().str() << "\n";
+	out << "| | surface normal   : " << intersec.surface_normal_in_object_frame().str() << "\n";
 	out << "| | facing surface   : " << (intersec.from_outside_to_inside() ? "outside" : "inside") << "\n";
 	out << "|\n";
 	out << "| In world frame\n";
-	out << "| | intesection point: " << intersec.get_intersection_vector_in_world_system().str() << "\n";
-	out << "| | surface normal   : " << intersec.get_surface_normal_in_world_system().str() << "\n";
+	out << "| | intesection point: " << intersec.position_in_root_frame().str() << "\n";
+	out << "| | surface normal   : " << intersec.surface_normal_in_root_frame().str() << "\n";
 	out << "|\n";		
 	out << StringTools::place_first_infront_of_each_new_line_of_second(
 		"| ",

@@ -51,8 +51,8 @@ double Photon::get_time_of_flight()const {
     for (const Intersection &intersec : intersection_history) {
         if (i != 0)
             time_of_flight += get_time_to_pass_distance_in_refractive_index(
-                intersec.get_intersection_distance(),
-                intersec.get_refractive_index_coming_from(wavelength));
+                intersec.distance_to_ray_support(),
+                intersec.refractive_index_coming_from(wavelength));
         i++;
     }
     return time_of_flight;

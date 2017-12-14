@@ -26,13 +26,13 @@ TEST_F(FresnelRefractionAndReflectionTest, flat_incident) {
   Vec3 normal(0.0,0.0,1.0); normal.normalize();
   FresnelRefractionAndReflection fresnel(incident,normal,n_from,n_going_to);
 
-  double incident_to_normal = incident.get_angle_in_between_in_rad(normal);
+  double incident_to_normal = incident.angle_in_between(normal);
 
   double outgoing_to_normal = asin(sin(incident_to_normal)* n_from/n_going_to);
 
   EXPECT_EQ(
     outgoing_to_normal, 
-    fresnel.get_refrac_dir_in_object_system().get_angle_in_between_in_rad(normal*-1.0)
+    fresnel.get_refrac_dir_in_object_system().angle_in_between(normal*-1.0)
   );
 }
 //----------------------------------------------------------------------

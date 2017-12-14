@@ -26,10 +26,10 @@ void Sensor::assign_photon_to_this_sensor(const Photon* photon) {
         photon->get_time_of_flight(),
         // x
         photon->get_final_intersection().
-            get_intersection_vector_in_object_system().x,
+            position_in_object_frame().x,
         // y
         photon->get_final_intersection().
-            get_intersection_vector_in_object_system().y,
+            position_in_object_frame().y,
         // tx
         -1.0*photon->
             get_final_intersection_incident_vector_in_object_frame().x,

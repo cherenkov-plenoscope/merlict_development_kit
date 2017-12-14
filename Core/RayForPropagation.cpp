@@ -54,14 +54,14 @@ string RayForPropagation::get_history_print()const {
         out << ++index << ") " << get_type_print(type) << " in ";
         out << intersection_history.at(index-1).get_object()->get_name();
         out << " " << intersection_history.at(index-1).
-            get_intersection_vector_in_world_system().str();
+            position_in_root_frame().str();
         out << ", dist to prev.:";
 
         if (index > 1) {
             out << intersection_history.at(index-1).
-                get_intersection_vector_in_world_system().distance_to(
+                position_in_root_frame().distance_to(
                     intersection_history.at(index-2).
-                        get_intersection_vector_in_world_system())*1e9 << "nm";
+                        position_in_root_frame())*1e9 << "nm";
         }
 
         out << "\n";
@@ -81,7 +81,7 @@ double RayForPropagation::get_accumulative_distance()const {
     double accumulative_distance = 0.0;
 
     for (const Intersection &intersection : intersection_history)
-        accumulative_distance += intersection.get_intersection_distance();
+        accumulative_distance += intersection.distance_to_ray_support();
 
     return accumulative_distance;
 }
@@ -131,10 +131,10 @@ get_final_intersection_incident_vector_in_object_frame()const {
 
         Vec3 final =
             intersection_history.at(last_i).
-                get_intersection_vector_in_world_system();
+                position_in_root_frame();
 
         Vec3 second_last = intersection_history.at(second_last_i).
-                get_intersection_vector_in_world_system();
+                position_in_root_frame();
 
         Vec3 incident_direction_in_world = (final - second_last);
             incident_direction_in_world.normalize();

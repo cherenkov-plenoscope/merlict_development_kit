@@ -33,13 +33,13 @@ bool Propagator::absorbed_in_medium_before_reaching_surface()const {
     const double one_over_e_way =
         isec.get_half_way_depth_coming_from(ph->wavelength);
     const double survival_prob =
-        exp(-isec.get_intersection_distance()/one_over_e_way);
+        exp(-isec.distance_to_ray_support()/one_over_e_way);
     return env.random_engine->uniform() > survival_prob;
 }
 
 void Propagator::interact_with_object() {
     if (
-        isec.get_facing_reflection_propability(ph->wavelength) >=
+        isec.facing_reflection_propability(ph->wavelength) >=
         env.random_engine->uniform()
     )
         reflect_on_surface_and_propagate_on(reflection_on_surface);
@@ -55,8 +55,8 @@ void Propagator::get_absorbed_in_void_space() {
 
 void Propagator::reflect_on_surface_and_propagate_on(const Interaction type) {
     ph->set_support_and_direction(
-        isec.get_intersection_vector_in_world_system(),
-        isec.get_reflection_direction_in_world_system(ph->get_direction()));
+        isec.position_in_root_frame(),
+        isec.reflection_direction_in_root_frame(ph->get_direction()));
 
     ph->push_back_intersection_and_type_to_propagation_history(
         isec,
@@ -77,8 +77,8 @@ void Propagator::fresnel_refraction_and_reflection() {
         isec.object2world()->
             get_transformed_orientation_inverse(ph->get_direction()),
         isec.get_normal_in_faceing_surface_system(),
-        isec.get_refractive_index_coming_from(ph->wavelength),
-        isec.get_refractive_index_going_to(ph->wavelength));
+        isec.refractive_index_coming_from(ph->wavelength),
+        isec.refractive_index_going_to(ph->wavelength));
 
     if (fresnel.reflection_propability() > env.random_engine->uniform())
         reflect_on_surface_and_propagate_on(fresnel_reflection_on_surface);
@@ -114,7 +114,7 @@ void Propagator::propagate_on_after_boundary_layer(
             isec.get_object()->get_root();
 
     ph->set_support_and_direction(
-        isec.get_intersection_vector_in_world_system(),
+        isec.position_in_root_frame(),
         isec.object2world()->get_transformed_orientation(
             fresnel.get_refrac_dir_in_object_system()));
 

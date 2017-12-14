@@ -63,8 +63,8 @@ TEST_F(PlaneIntersectionTest, frontal) {
 
 	ASSERT_TRUE(intersec.does_intersect());
 	EXPECT_EQ(plane, intersec.get_object());
-	EXPECT_EQ(Vec3::ORIGIN, intersec.get_intersection_vector_in_object_system());
-	EXPECT_EQ(Vec3(0.0, 0.0, 1.0), intersec.get_surface_normal_in_object_system());
+	EXPECT_EQ(Vec3::ORIGIN, intersec.position_in_object_frame());
+	EXPECT_EQ(Vec3(0.0, 0.0, 1.0), intersec.surface_normal_in_object_frame());
 }
 //------------------------------------------------------------------------------
 TEST_F(PlaneIntersectionTest, frontal_lateral_offset_alwas_intersection) {
@@ -79,8 +79,8 @@ TEST_F(PlaneIntersectionTest, frontal_lateral_offset_alwas_intersection) {
 
 			ASSERT_TRUE(intersec.does_intersect());
 			EXPECT_EQ(plane, intersec.get_object());
-			EXPECT_EQ(Vec3(x_support, y_support, 0.0), intersec.get_intersection_vector_in_object_system());
-			EXPECT_EQ(Vec3(0.0, 0.0, 1.0), intersec.get_surface_normal_in_object_system());
+			EXPECT_EQ(Vec3(x_support, y_support, 0.0), intersec.position_in_object_frame());
+			EXPECT_EQ(Vec3(0.0, 0.0, 1.0), intersec.surface_normal_in_object_frame());
 		}
 	}
 }

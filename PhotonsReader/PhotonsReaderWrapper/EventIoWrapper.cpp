@@ -2,6 +2,7 @@
 #include "Corsika/EventIo/PhotonFactory.h"
 using std::string;
 using std::vector;
+using std::array;
 
 //------------------------------------------------------------------------------
 EventIoWrapper::EventIoWrapper(const string _path): 

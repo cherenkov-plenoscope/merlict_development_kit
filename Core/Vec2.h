@@ -14,7 +14,7 @@ struct Vec2 {
     unsigned int get_quadrant()const;
     double norm()const;
     void normalize();
-    double get_angle_in_between_in_rad(const Vec2& vec)const;
+    double angle_in_between(const Vec2& vec)const;
     double operator*(const Vec2 v)const;
     Vec2 operator*(const double scalar)const;
     Vec2 operator-(const Vec2 v)const;

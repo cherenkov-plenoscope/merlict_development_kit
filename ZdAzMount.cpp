@@ -11,7 +11,7 @@ namespace ZdAzMount {
 			get_transformed_orientation(Vec3::UNIT_Z);
 
 		return 
-			Vec3::UNIT_Z.get_angle_in_between_in_rad(optical_axis_in_world);	
+			Vec3::UNIT_Z.angle_in_between(optical_axis_in_world);	
 	}
 	//--------------------------------------------------------------------------
 	double get_az_of_frame(const Frame* frame) {

@@ -20,7 +20,7 @@ struct Vec3 {
     void normalize();
     Vec3 cross(const Vec3 v)const;
     void mirror(Vec3* ray)const;
-    double get_angle_in_between_in_rad(const Vec3& vec)const;
+    double angle_in_between(const Vec3& vec)const;
     double operator*(const Vec3 v)const;
     Vec3 operator*(const double scalar)const;
     Vec3 operator-(const Vec3 v)const;

@@ -36,7 +36,7 @@ double TelescopeArrayControl::get_zenith_distance_of_frame(const Frame* frame)co
 	Vec3 optical_axis_in_world = frame->frame2world()->
 		get_transformed_orientation(Vec3::UNIT_Z);
 
-	return Vec3::UNIT_Z.get_angle_in_between_in_rad(optical_axis_in_world);	
+	return Vec3::UNIT_Z.angle_in_between(optical_axis_in_world);	
 }
 //------------------------------------------------------------------------------
 double TelescopeArrayControl::get_azimuth_of_frame(const Frame* frame)const {

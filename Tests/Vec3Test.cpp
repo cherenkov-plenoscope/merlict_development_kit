@@ -234,10 +234,10 @@ TEST_F(Vec3Test, angle_in_between) {
     Vec3 a = Vec3::UNIT_X;
     Vec3 b = Vec3::UNIT_X;
 
-    EXPECT_EQ(0.0, a.get_angle_in_between_in_rad(b));
+    EXPECT_EQ(0.0, a.angle_in_between(b));
     EXPECT_EQ(
-        b.get_angle_in_between_in_rad(a),
-        a.get_angle_in_between_in_rad(b));
+        b.angle_in_between(a),
+        a.angle_in_between(b));
 
     Vec3 c = Vec3::UNIT_X*5.0;
     EXPECT_NE(1.0, c.norm());
@@ -245,10 +245,10 @@ TEST_F(Vec3Test, angle_in_between) {
     Vec3 d = Vec3::UNIT_X*5.0;
     EXPECT_NE(1.0, d.norm());
 
-    EXPECT_EQ(0.0, d.get_angle_in_between_in_rad(c));
+    EXPECT_EQ(0.0, d.angle_in_between(c));
     EXPECT_EQ(
-        c.get_angle_in_between_in_rad(d),
-        d.get_angle_in_between_in_rad(c));
+        c.angle_in_between(d),
+        d.angle_in_between(c));
 
     Vec3 foo = Vec3::UNIT_X*5.0 + Vec3::UNIT_Y*5.0;
     EXPECT_NE(1.0, c.norm());
@@ -256,7 +256,7 @@ TEST_F(Vec3Test, angle_in_between) {
     Vec3 bar = Vec3::UNIT_X*5.0;
     EXPECT_NE(1.0, d.norm());
 
-    EXPECT_NEAR(Deg2Rad(45.0) , foo.get_angle_in_between_in_rad(bar), 1e-5);
+    EXPECT_NEAR(Deg2Rad(45.0) , foo.angle_in_between(bar), 1e-5);
 }
 
 TEST_F(Vec3Test, octant_encoding) {

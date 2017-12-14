@@ -13,6 +13,6 @@ DistanceMeter::DistanceMeter(const Ray* ray, const Frame* world) {
 
     if (intersec.does_intersect()) {
         faces_an_object = true;
-        distance_to_closest_object = intersec.get_intersection_distance();
+        distance_to_closest_object = intersec.distance_to_ray_support();
     }
 }

@@ -122,7 +122,7 @@ void Vec3::mirror(Vec3* ray)const {
                 (1.0 - 2.0*z*z) * ray->z);
 }
 
-double Vec3::get_angle_in_between_in_rad(const Vec3& that)const {
+double Vec3::angle_in_between(const Vec3& that)const {
     Vec3 this_normalized = *this/this->norm();
     Vec3 that_normalized = that/that.norm();
     return acos(this_normalized*that_normalized);

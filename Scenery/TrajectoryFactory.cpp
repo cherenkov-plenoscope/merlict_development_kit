@@ -33,9 +33,9 @@ void TrajectoryFactory::append_trajectory_to(Frame* root_frame) {
 		 	ray_trajectory->set_cylinder(
 		 		radius_of_trajectory, 
 		 		ray->intersection_history.at(i).
-		 			get_intersection_vector_in_world_system(),
+		 			position_in_root_frame(),
 		 		ray->intersection_history.at(i+1).
-		 			get_intersection_vector_in_world_system()
+		 			position_in_root_frame()
 		 	);
 		 	ray_trajectory->set_outer_color(&Color::RED);
 		 	ray_trajectory->set_inner_color(&Color::RED);
@@ -45,7 +45,7 @@ void TrajectoryFactory::append_trajectory_to(Frame* root_frame) {
 		intersection_indicator->set_name_pos_rot(
 			get_intersection_point_name_of_part(i),
 			ray->intersection_history.at(i).
-				get_intersection_vector_in_world_system(),
+				position_in_root_frame(),
 			Rot3::UNITY
 		);
 

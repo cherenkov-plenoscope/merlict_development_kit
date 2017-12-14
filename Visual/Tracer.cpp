@@ -29,7 +29,7 @@ void Tracer::trace_back() {
 }
 
 void Tracer::trace_back_to_object_interaction() {
-    if (isec.get_facing_reflection_propability(wavelength) >= prng->uniform())
+    if (isec.facing_reflection_propability(wavelength) >= prng->uniform())
         trace_back_after_reflection();
     else
         trace_back_to_boundary_layer();
@@ -37,8 +37,8 @@ void Tracer::trace_back_to_object_interaction() {
 
 void Tracer::trace_back_after_reflection() {
     cray->set_support_and_direction(
-        isec.get_intersection_vector_in_world_system(),
-        isec.get_reflection_direction_in_world_system(cray->get_direction()));
+        isec.position_in_root_frame(),
+        isec.reflection_direction_in_root_frame(cray->get_direction()));
     trace_back();
 }
 
@@ -54,8 +54,8 @@ void Tracer::trace_back_to_fresnel_interaction() {
         isec.object2world()->
             get_transformed_orientation_inverse(cray->get_direction()),
         isec.get_normal_in_faceing_surface_system(),
-        isec.get_refractive_index_coming_from(wavelength),
-        isec.get_refractive_index_going_to(wavelength));
+        isec.refractive_index_coming_from(wavelength),
+        isec.refractive_index_going_to(wavelength));
 
     if (fresnel.reflection_propability() > prng->uniform())
         trace_back_after_reflection();
@@ -67,7 +67,7 @@ void Tracer::trace_back_to_surface() {
     if (config->global_illumination.on)
         color = shadow_of_sky_light();
     else
-        color = isec.get_facing_color();
+        color = isec.facing_color();
 }
 
 void Tracer::trace_back_beyond_boundary_layer(
@@ -81,7 +81,7 @@ void Tracer::trace_back_beyond_boundary_layer(
         scenery = isec.get_object()->get_root();
 
     cray->set_support_and_direction(
-        isec.get_intersection_vector_in_world_system(),
+        isec.position_in_root_frame(),
         isec.object2world()->get_transformed_orientation(
             fresnel.get_refrac_dir_in_object_system()));
 
@@ -95,7 +95,7 @@ void Tracer::trace_back_to_sky_dome() {
 Color Tracer::shadow_of_sky_light()const {
     const double max_darkening = 0.750;
 
-    Vec3 specular_dir = isec.get_reflection_direction_in_world_system(
+    Vec3 specular_dir = isec.reflection_direction_in_root_frame(
         config->global_illumination.incoming_direction);
 
     double darkening = specular_dir*cray->get_direction();
@@ -104,7 +104,7 @@ Color Tracer::shadow_of_sky_light()const {
     if (darkening > max_darkening) darkening = max_darkening;
 
     Color color;
-    color = isec.get_facing_color();
+    color = isec.facing_color();
 
     if (!surface_iluminated_by_global_light_source())
         darkening = darkening*0.25;
@@ -116,13 +116,13 @@ Color Tracer::shadow_of_sky_light()const {
 
 bool Tracer::surface_iluminated_by_global_light_source()const {
     Ray ray_to_source(
-        isec.get_intersection_vector_in_world_system(),
+        isec.position_in_root_frame(),
         config->global_illumination.incoming_direction);
 
     const Intersection intersec_light_source =
         RayAndFrame::first_intersection(&ray_to_source, scenery);
 
-    double p = isec.get_surface_normal_in_world_system()*
+    double p = isec.surface_normal_in_root_frame()*
         config->global_illumination.incoming_direction;
 
     if (surface_normal_is_facing_observer(isec))
@@ -137,7 +137,7 @@ bool Tracer::surface_normal_is_facing_observer(
     const Intersection &intersection
 )const {
     return (
-        intersection.get_surface_normal_in_world_system()*
+        intersection.surface_normal_in_root_frame()*
         cray->get_direction() >
         0.0);
 }
