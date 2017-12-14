@@ -4,6 +4,11 @@ cmake_minimum_required(VERSION 2.8)
 set (CMAKE_CXX_FLAGS "-std=c++1z -Wall -Wextra -pedantic -O1 -g -I")
 project(mctracer)
 
+if (APPLE)
+    set(CMAKE_MACOSX_RPATH 1)
+    set(CMAKE_MACOSX_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif()
+
 #--------------------------------
 # Assert compiler supports C++ 11
 include(CheckCXXCompilerFlag)
