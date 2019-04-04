@@ -1,4 +1,4 @@
-#include "merlict/PolygonMesh.h"
+#include "merlict/TriangleMesh.h"
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -6,8 +6,8 @@
 
 namespace merlict {
 
-PolygonMesh read_polygon_mesh(const std::string& path) {
-    PolygonMesh mesh;
+TriangleMesh read_triangle_mesh(const std::string& path) {
+    TriangleMesh mesh;
     std::ifstream fin(path.c_str());
     if (!fin.is_open()) {
         std::stringstream info;
@@ -90,7 +90,7 @@ PolygonMesh read_polygon_mesh(const std::string& path) {
 }
 
 
-void write_polygon_mesh(const PolygonMesh& mesh, const std::string& path) {
+void write_triangle_mesh(const TriangleMesh& mesh, const std::string& path) {
     std::ofstream fout(path.c_str());
     if (!fout.is_open()) {
         std::stringstream info;

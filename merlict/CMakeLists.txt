@@ -30,6 +30,6 @@ set(SOURCE
     ${CMAKE_CURRENT_SOURCE_DIR}/tools.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ospath.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tsvio.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/PolygonMesh.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/TriangleMesh.cpp
     PARENT_SCOPE
 )

@@ -1,32 +1,32 @@
 // Copyright 2014 Sebastian A. Mueller
 #include "catch.hpp"
-#include "merlict/PolygonMesh.h"
+#include "merlict/TriangleMesh.h"
 namespace ml = merlict;
 
 
-TEST_CASE("PolygonMeshTest: ctor", "[merlict]") {
-    ml::PolygonMesh m;
+TEST_CASE("TriangleMeshTest: ctor", "[merlict]") {
+    ml::TriangleMesh m;
     CHECK(0 == m.vertices.size());
     CHECK(0 == m.faces.size());
 }
 
-TEST_CASE("PolygonMeshTest: read_not_existing_file", "[merlict]") {
+TEST_CASE("TriangleMeshTest: read_not_existing_file", "[merlict]") {
     CHECK_THROWS_AS(
-        ml::read_polygon_mesh("merlict/tests/resources/does_not_exist.off"),
+        ml::read_triangle_mesh("merlict/tests/resources/does_not_exist.off"),
         std::runtime_error);
 }
 
-TEST_CASE("PolygonMeshTest: read_off", "[merlict]") {
-    ml::PolygonMesh m = ml::read_polygon_mesh(
+TEST_CASE("TriangleMeshTest: read_off", "[merlict]") {
+    ml::TriangleMesh m = ml::read_triangle_mesh(
         "merlict/tests/resources/text_on_cube.off");
     CHECK(1015u == m.vertices.size());
     CHECK(2026u == m.faces.size());
 
-    ml::write_polygon_mesh(
+    ml::write_triangle_mesh(
         m,
         "merlict/tests/resources/back_text_on_cube.off.tmp");
 
-    ml::PolygonMesh m_back = ml::read_polygon_mesh(
+    ml::TriangleMesh m_back = ml::read_triangle_mesh(
         "merlict/tests/resources/back_text_on_cube.off.tmp");
 
     REQUIRE(m.vertices.size() == m_back.vertices.size());

@@ -46,6 +46,6 @@ set(TEST_SOURCE_MERLICT
     ${CMAKE_CURRENT_SOURCE_DIR}/FunctionMapTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SensorMapTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DistanceMeterTest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/PolygonMeshTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/TriangleMeshTest.cpp
     PARENT_SCOPE
 )

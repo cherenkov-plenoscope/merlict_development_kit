@@ -1,6 +1,6 @@
 // Copyright 2014 Sebastian A. Mueller
-#ifndef MERLICT_POLYGONMESH_H_
-#define MERLICT_POLYGONMESH_H_
+#ifndef MERLICT_TRIANGLEMESH_H_
+#define MERLICT_TRIANGLEMESH_H_
 
 #include <stdint.h>
 #include <string>
@@ -9,15 +9,15 @@
 
 namespace merlict {
 
-struct PolygonMesh {
+struct TriangleMesh {
     std::vector<std::array<float ,3>> vertices;
     std::vector<std::array<uint32_t, 3>> faces;
 };
 
-PolygonMesh read_polygon_mesh(const std::string& path);
+TriangleMesh read_triangle_mesh(const std::string& path);
 
-void write_polygon_mesh(const PolygonMesh& mesh, const std::string& path);
+void write_triangle_mesh(const TriangleMesh& mesh, const std::string& path);
 
 }  // namespace merlict
 
-#endif  // MERLICT_POLYGONMESH_H_
+#endif  // MERLICT_TRIANGLEMESH_H_
