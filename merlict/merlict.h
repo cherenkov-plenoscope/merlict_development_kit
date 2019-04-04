@@ -30,6 +30,7 @@
 #include "tools.h"
 #include "ospath.h"
 #include "tsvio.h"
+#include "PolygonMesh.h"
 
 #include "function/function.h"
 #include "random/random.h"
