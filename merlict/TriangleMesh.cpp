@@ -7,6 +7,9 @@
 namespace merlict {
 
 TriangleMesh read_triangle_mesh(const std::string& path) {
+    // The object-file-format for triangle-meshes
+    // - https://en.wikipedia.org/wiki/OFF_(file_format)
+    // -
     TriangleMesh mesh;
     std::ifstream fin(path.c_str());
     if (!fin.is_open()) {
