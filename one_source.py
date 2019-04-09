@@ -1,13 +1,10 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import os
 import glob
-#import pyfiglet
+copyright_notice = "// Copyright 2018 Sebastian A. Mueller\n"
 
-
-#merlict_head_tmp = pyfiglet.Figlet("larry3d").renderText("merlict")
-merlict_head = "// Copyright 2018 Sebastian A. Mueller\n"
-#for line in merlict_head_tmp.splitlines():
-#   merlict_head += "//  " + " "*10 + line + "  " + " "*10 +"//\n"
 
 def inside_namespace(txt):
     start_first_namespace = txt.find("{", txt.find('namespace merlict')) + 1
@@ -16,9 +13,7 @@ def inside_namespace(txt):
     pos = start_first_namespace
     bracket_count = 1
 
-    # print("\n")
     while bracket_count > 0:
-        # print(pos, bracket_count)
         next_o = txt.find("{", pos)
         next_c = txt.find("}", pos)
         if next_o == -1:
@@ -71,6 +66,168 @@ def without_include_lines(txt):
     return "\n".join(out)
 
 
+def find_all_header_files_in_dirs(dirs):
+    headers = []
+    for d in dirs:
+        for header in glob.glob(os.path.join(d, '*.h')):
+            headers.append(header)
+    return headers
+
+
+def make_pri_heads(headers, go_first):
+    prior = 1000
+    pri_heads = []
+    for header in headers:
+        has_pri = False
+        for pri in go_first:
+            if pri in header:
+                pri_heads.append(go_first[pri])
+                has_pri = True
+        if not has_pri:
+            pri_heads.append(prior)
+            prior += 1
+    return pri_heads
+
+
+def sort_headers_with_pri_heads(headers, pri_heads):
+    pri_heads = np.array(pri_heads)
+    argsort = np.argsort(pri_heads)
+
+    headers = [headers[i] for i in argsort]
+    return headers
+
+
+def find_sources_from_headers(headers):
+    sources = []
+    for header in headers:
+        potentiual_source_path = os.path.splitext(header)[0] + '.cpp'
+        if os.path.exists(potentiual_source_path):
+            sources.append(potentiual_source_path)
+    return sources
+
+
+def make_header_includes(headers):
+    header_includes = []
+    for header in headers:
+        with open(header, 'rt') as fin:
+            txt = fin.read()
+        incs = all_includes(txt)
+        for inc in incs:
+            header_includes.append(inc)
+
+    header_includes = list(set(header_includes))
+    return header_includes
+
+
+def find_source_incl_and_usings(sources):
+    source_includes = []
+    source_usings = []
+
+    for source in sources:
+        with open(source, 'rt') as fin:
+            txt = fin.read()
+        incs = all_includes(txt)
+        for inc in incs:
+            source_includes.append(inc)
+        usis = all_usings(txt)
+        for usi in usis:
+            source_usings.append(usi)
+
+    source_includes = list(set(source_includes))
+    source_usings = list(set(source_usings))
+
+    return source_includes, source_usings
+
+
+def write_the_single_header_file(out_path_h, headers, header_includes):
+    with open(out_path_h, 'wt') as fout:
+        fout.write(copyright_notice)
+        fout.write("\n")
+
+        fout.write("#ifndef MERLICT_H_\n")
+        fout.write("#define MERLICT_H_\n")
+        fout.write("\n")
+
+        for header_include in header_includes:
+            fout.write(header_include + '\n')
+        fout.write("\n")
+
+        fout.write("namespace merlict {\n")
+
+        for header in headers:
+            with open(header, 'rt') as fin:
+                h_txt = fin.read()
+            fout.write(inside_namespace(h_txt))
+            fout.write("\n")
+
+        fout.write("}  // namespace merlict\n")
+        fout.write("\n")
+
+        fout.write("#endif  // MERLICT_H_\n")
+
+
+def write_the_single_cpp_file(out_path_cpp, sources, source_includes):
+    with open(out_path_cpp, 'wt') as fout:
+        fout.write(copyright_notice)
+        fout.write("\n")
+
+        fout.write('#include "merlict.h"\n')
+        for source_include in source_includes:
+            fout.write(source_include + '\n')
+        fout.write("\n")
+
+        fout.write("namespace merlict {\n")
+
+        for source in sources:
+            with open(source, 'rt') as fin:
+                h_txt = fin.read()
+            fout.write(without_include_lines(inside_namespace(h_txt)))
+            fout.write("\n")
+
+        fout.write("}  // namespace merlict\n")
+        fout.write("\n")
+
+
+def do_something_with_tests(headers, sources, out_path_test):
+
+    tests = []
+    test_includes = []
+
+    for header in headers:
+        potentiual_source_path = os.path.splitext(header)[0]+'.cpp'
+        if os.path.exists(potentiual_source_path):
+            sources.append(potentiual_source_path)
+
+    for test_source in test_sources:
+        with open(test_source, 'rt') as fin:
+            txt = fin.read()
+        incs = all_includes(txt)
+        for inc in incs:
+            test_includes.append(inc)
+
+    test_includes = list(set(test_includes))
+
+    with open(out_path_test, 'wt') as fout:
+        fout.write(copyright_notice)
+        fout.write("\n")
+        fout.write("#define CATCH_CONFIG_MAIN\n")
+        fout.write("\n")
+        fout.write('#include "merlict.h"\n')
+        fout.write('#include "merlict/tests/catch.hpp"\n')
+        for test_include in test_includes:
+            fout.write(test_include + '\n')
+        fout.write("\n")
+
+        for test_source in test_sources:
+            with open(test_source, 'rt') as fin:
+                h_txt = fin.read()
+            fout.write(without_include_lines(h_txt))
+            fout.write("\n")
+
+        fout.write("\n")
+
+
+
 dirs = [
     "merlict/function",
     "merlict/random",
@@ -116,6 +273,15 @@ pri_queu = [
     "ColorMap",
     "SensorMap",
     "FunctionMap",
+    'merlict/scenery/geometry/ZaxisCylinderRayIntersectionEquation.h',
+    'merlict/scenery/geometry/TwoSolutionSurfaceRayEquation.h',
+    'merlict/scenery/geometry/SurfaceWithOuterPrismBound.h',
+    'merlict/scenery/geometry/XyPlaneRayIntersectionEquation.h',
+    'merlict/scenery/geometry/SphericalCapRayIntersectionEquation.h',
+    'merlict/scenery/geometry/HexagonalPrismZ.h',
+    'merlict/scenery/geometry/HexGridFlower.h',
+    'merlict/scenery/geometry/EllipticalCapRayIntersectionEquation.h',
+    'merlict/scenery/geometry/HexGridAnnulus.h',
 ]
 
 test_sources = [
@@ -169,161 +335,37 @@ test_sources = [
     "tests/DistanceMeterTest.cpp",
 ]
 
-s = 0
-go_first = {}
-for pri_q in pri_queu:
-    go_first[pri_q] = s
-    s += 1
+test_sources = [
+    os.path.join('merlict', x)
+    for x in test_sources
+]
 
-out_path_h = os.path.join('merlict.h')
-out_path_cpp = os.path.join('merlict.cpp')
-out_path_test = os.path.join('merlict_test.cpp')
+def main():
+    go_first = {
+        pri_q: s
+        for s, pri_q
+        in enumerate(pri_queu)
+    }
 
-headers = []
-header_includes = []
+    out_path_h = 'merlict.h'
+    out_path_cpp = 'merlict.cpp'
+    out_path_test = 'merlict_test.cpp'
 
-for d in dirs:
-    for header in glob.glob(os.path.join(d, '*.h')):
-        headers.append(header)
+    headers = find_all_header_files_in_dirs(dirs)
+    pri_heads = make_pri_heads(headers, go_first)
 
-prior = 1000
-pri_heads = []
-for header in headers:
-    has_pri = False
-    for pri in go_first:
-        if pri in header:
-            pri_heads.append(go_first[pri])
-            has_pri = True
-    if not has_pri:
-        pri_heads.append(prior)
-        prior +=1
+    headers = sort_headers_with_pri_heads(headers, pri_heads)
+    sources = find_sources_from_headers(headers)
+    header_includes = make_header_includes(headers)
 
-pri_heads = np.array(pri_heads)
-argsort = np.argsort(pri_heads)
+    source_includes, source_usings = find_source_incl_and_usings(sources)
 
-headers = [headers[i] for i in argsort]
+    write_the_single_header_file(out_path_h, headers, header_includes)
+    write_the_single_cpp_file(out_path_cpp, sources, source_includes)
+    do_something_with_tests(headers, sources, out_path_test)
 
-sources = []
-source_includes = []
-source_usings = []
-
-for header in headers:
-    potentiual_source_path = os.path.splitext(header)[0]+'.cpp'
-    if os.path.exists(potentiual_source_path):
-        sources.append(potentiual_source_path)
-
-
-for header in headers:
-    with open(header, 'rt') as fin:
-        txt = fin.read()
-    incs = all_includes(txt)
-    for inc in incs:
-        header_includes.append(inc)
-
-header_includes = list(set(header_includes))
-
-for source in sources:
-    with open(source, 'rt') as fin:
-        txt = fin.read()
-    incs = all_includes(txt)
-    for inc in incs:
-        source_includes.append(inc)
-    usis = all_usings(txt)
-    for usi in usis:
-        source_usings.append(usi)
-
-source_includes = list(set(source_includes))
-source_usings = list(set(source_usings))
-
-with open(out_path_h, 'wt') as fout:
-    fout.write(merlict_head)
-    fout.write("\n")
-
-    fout.write("#ifndef MERLICT_H_\n")
-    fout.write("#define MERLICT_H_\n")
-    fout.write("\n")
-
-    for header_include in header_includes:
-        fout.write(header_include + '\n')
-    fout.write("\n")
-
-    fout.write("namespace merlict {\n")
-
-    for header in headers:
-        print(header)
-        with open(header, 'rt') as fin:
-            h_txt = fin.read()
-        fout.write(inside_namespace(h_txt))
-        fout.write("\n")
-
-    fout.write("}  // namespace merlict\n")
-    fout.write("\n")
-
-    fout.write("#endif  // MERLICT_H_\n")
-
-
-with open(out_path_cpp, 'wt') as fout:
-    fout.write(merlict_head)
-    fout.write("\n")
-
-    fout.write('#include "merlict.h"\n')
-    for source_include in source_includes:
-        fout.write(source_include + '\n')
-    fout.write("\n")
-
-    fout.write("namespace merlict {\n")
-
-    for source in sources:
-        print(source)
-        with open(source, 'rt') as fin:
-            h_txt = fin.read()
-        fout.write(without_include_lines(inside_namespace(h_txt)))
-        fout.write("\n")
-
-    fout.write("}  // namespace merlict\n")
-    fout.write("\n")
-
-
-
-# TEST
-# ----
-tests = []
-test_includes = []
-
-for header in headers:
-    potentiual_source_path = os.path.splitext(header)[0]+'.cpp'
-    if os.path.exists(potentiual_source_path):
-        sources.append(potentiual_source_path)
-
-
-for test_source in test_sources:
-    with open(test_source, 'rt') as fin:
-        txt = fin.read()
-    incs = all_includes(txt)
-    for inc in incs:
-        test_includes.append(inc)
-
-test_includes = list(set(test_includes))
-
-with open(out_path_test, 'wt') as fout:
-    fout.write(merlict_head)
-    fout.write("\n")
-    fout.write("#define CATCH_CONFIG_MAIN\n")
-    fout.write("\n")
-    fout.write('#include "merlict.h"\n')
-    fout.write('#include "merlict/tests/catch.hpp"\n')
-    for test_include in test_includes:
-        fout.write(test_include + '\n')
-    fout.write("\n")
-
-    for test_source in test_sources:
-        print(test_source)
-        with open(test_source, 'rt') as fin:
-            h_txt = fin.read()
-        fout.write(without_include_lines(h_txt))
-        fout.write("\n")
-
-    fout.write("\n")
 
 
 # g++ docopt/docopt.cpp lict_prop.cpp -o prop -std=gnu++11
+if __name__ == '__main__':
+    main()

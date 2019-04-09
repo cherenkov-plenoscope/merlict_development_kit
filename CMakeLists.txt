@@ -1,23 +1,24 @@
 # Copyright 2011-2018 Sebastian A. Mueller
 cmake_minimum_required(VERSION 2.8)
-set (CMAKE_CXX_FLAGS "-std=c++1z -pthread -Wall -Wextra -pedantic -O1 -g -I")
+
 project(merlict)
 
-# Assert compiler supports C++ 11
+# Assert compiler supports C++ 17
 include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+CHECK_CXX_COMPILER_FLAG("-std=c++17" COMPILER_SUPPORTS_CXX17)
+if(COMPILER_SUPPORTS_CXX17)
+    set(CMAKE_CXX_FLAGS "-std=c++17 -pthread -Wall -Wextra -pedantic -O1 -g -I")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 else()
     message(
         STATUS
-        "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support.
+        "The compiler ${CMAKE_CXX_COMPILER} has no C++17 support.
         Please use a different C++ compiler.")
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 5)
-    message(FATAL_ERROR "Insufficient gcc version, need at least gcc 5")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6)
+    message(FATAL_ERROR "Insufficient gcc version, need at least gcc 6")
   endif()
 endif()
 

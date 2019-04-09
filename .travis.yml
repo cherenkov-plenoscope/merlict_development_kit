@@ -1,0 +1,38 @@
+language: python
+python:
+    - 3.6
+compiler: gcc
+dist: xenial
+
+# C++ 17 install from:
+# https://github.com/richelbilderbeek/travis_gcc_cpp17/blob/master/.travis.yml
+
+before_install:
+    # C++17
+    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    - sudo apt-get update -qq
+
+install:
+    - sudo apt-get install -qq libopencv-dev
+    # C++17
+    - sudo apt-get install -qq g++-6
+    - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
+
+    - pip install --upgrade pip setuptools wheel
+    - pip install --only-binary=numpy numpy
+
+script:
+    - mkdir build
+    - cd build
+
+    - cmake ..
+    - make
+
+    - cd ..
+    - ./build/merlict-test
+
+    - echo "trying out one_source.py"
+    - ./one_source.py
+    - g++ merlict_test.cpp merlict.cpp -o merlict_test -O1
+    - ./merlict_test
+
