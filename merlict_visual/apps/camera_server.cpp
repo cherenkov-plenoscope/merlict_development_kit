@@ -11,9 +11,9 @@ static const char USAGE[] =
 R"(Show a scenery
 
     Usage:
-      mctCameraServer --scenery=SCENERY_PATH [--config=CONFIG_PATH]
-      mctCameraServer (-h | --help)
-      mctCameraServer --version
+      cameraserver --scenery=SCENERY_PATH [--config=CONFIG_PATH]
+      cameraserver (-h | --help)
+      cameraserver --version
 
     Options:
       -s --scenery=SCENERY_PATH     Scenery file path.
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
             USAGE,
             { argv + 1, argv + argc },
             true,        // show help if requested
-            "mctCameraServer 0.1");  // version string
+            "0.1");  // version string
 
         ml::ospath::Path scenery_path(
             args.find("--scenery")->second.asString());

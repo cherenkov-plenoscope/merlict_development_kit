@@ -17,7 +17,7 @@ std::string print_size(const std::string &name, T s) {
 }
 
 
-TEST_CASE("SizeOfTest: sizes_of_mct", "[merlict]") {
+TEST_CASE("SizeOfTest: sizes_of", "[merlict]") {
     std::stringstream out;
     out << "struct/name                size/bytes\n";
     out << "--------------------------------------" << "\n";

@@ -1,6 +1,6 @@
 // Copyright 2014 Sebastian A. Mueller
-#ifndef MCTRACER_CORSIKA_TOOLS_H_
-#define MCTRACER_CORSIKA_TOOLS_H_
+#ifndef MERLICT_CORSIKA_CORSIKA_H_
+#define MERLICT_CORSIKA_CORSIKA_H_
 
 #include <iostream>
 #include <vector>
@@ -51,4 +51,4 @@ std::string float2str(const float word_in_float);
 
 }  // namespace corsika
 
-#endif  // MCTRACER_CORSIKA_TOOLS_H_
+#endif  // MERLICT_CORSIKA_CORSIKA_H_

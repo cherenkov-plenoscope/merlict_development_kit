@@ -4,12 +4,12 @@
 #include "merlict_json/json.h"
 #include "merlict/merlict.h"
 #include "merlict_visual/visual.h"
-namespace nl = nlohmann;
-namespace mct = merlict;
+namespace nlo = nlohmann;
+namespace ml = merlict;
 
 
 TEST_CASE("JsonTest: nlohmann_getter", "[merlict]") {
-    nl::json j = R"({"f8": -0.898})"_json;
+    nlo::json j = R"({"f8": -0.898})"_json;
     CHECK(-0.898 == j["f8"].get<double>());
     CHECK(0 == j["f8"].get<int64_t>());
     CHECK_THROWS_AS(j["f8"].get<std::string>(), std::exception);
@@ -17,54 +17,54 @@ TEST_CASE("JsonTest: nlohmann_getter", "[merlict]") {
 }
 
 TEST_CASE("JsonTest: object_wrapper_simple", "[merlict]") {
-    nl::json j = R"({"f8": -0.898})"_json;
-    mct::json::Object obj(j);
+    nlo::json j = R"({"f8": -0.898})"_json;
+    ml::json::Object obj(j);
     CHECK(-0.898 == obj.f8("f8"));
 }
 
 TEST_CASE("JsonTest: object_wrapper_multiple_objects", "[merlict]") {
-    nl::json j = R"({"f8": -0.898, "hans": {"A":1, "B":2}})"_json;
-    mct::json::Object obj(j);
+    nlo::json j = R"({"f8": -0.898, "hans": {"A":1, "B":2}})"_json;
+    ml::json::Object obj(j);
     CHECK(-0.898 == obj.f8("f8"));
     CHECK(1 == obj.obj("hans").i8("A"));
     CHECK(2 == obj.obj("hans").i8("B"));
 }
 
 TEST_CASE("JsonTest: object_wrapper_lists", "[merlict]") {
-    nl::json j = R"({"f8": -0.898, "peter": [1, 2, 3]})"_json;
-    mct::json::Object obj(j);
+    nlo::json j = R"({"f8": -0.898, "peter": [1, 2, 3]})"_json;
+    ml::json::Object obj(j);
     CHECK(-0.898 == obj.f8("f8"));
-    CHECK_THROWS_AS(obj.obj("peter").i8("A"), mct::json::MissingKey);
+    CHECK_THROWS_AS(obj.obj("peter").i8("A"), ml::json::MissingKey);
     CHECK(3u == obj.obj("peter").size());
     CHECK(1 == obj.obj("peter").i8(0));
     CHECK(2 == obj.obj("peter").i8(1));
     CHECK(3 == obj.obj("peter").i8(2));
-    CHECK_THROWS_AS(obj.obj("peter").i8(3), mct::json::ListTooShort);
+    CHECK_THROWS_AS(obj.obj("peter").i8(3), ml::json::ListTooShort);
 }
 
 TEST_CASE("JsonTest: object_wrapper_vec3", "[merlict]") {
-    nl::json j = R"({"f8": -0.898, "peter": [1, 2, 3]})"_json;
-    mct::json::Object obj(j);
+    nlo::json j = R"({"f8": -0.898, "peter": [1, 2, 3]})"_json;
+    ml::json::Object obj(j);
     CHECK(-0.898 == obj.f8("f8"));
-    CHECK(mct::Vec3(1, 2, 3) == obj.vec3("peter"));
+    CHECK(ml::Vec3(1, 2, 3) == obj.vec3("peter"));
 }
 
 TEST_CASE("JsonTest: object_wrapper_bad_vec3", "[merlict]") {
-    nl::json j = R"({"peter": [1, 2]})"_json;
-    mct::json::Object obj(j);
-    CHECK_THROWS_AS(obj.vec3("peter"), mct::json::BadTriple);
+    nlo::json j = R"({"peter": [1, 2]})"_json;
+    ml::json::Object obj(j);
+    CHECK_THROWS_AS(obj.vec3("peter"), ml::json::BadTriple);
 }
 
 TEST_CASE("JsonTest: empty_path", "[merlict]") {
     const std::string path = "";
-    mct::Scenery s;
-    CHECK_THROWS_AS(mct::json::append_to_frame_in_scenery(&s.root, &s, path), std::runtime_error);
+    ml::Scenery s;
+    CHECK_THROWS_AS(ml::json::append_to_frame_in_scenery(&s.root, &s, path), std::runtime_error);
 }
 
 TEST_CASE("JsonTest: mini_scenery_with_stl", "[merlict]") {
     const std::string path =  "merlict/tests/resources/scenery/mini_scenery.json";
-    mct::Scenery s;
-    mct::json::append_to_frame_in_scenery(&s.root, &s, path);
+    ml::Scenery s;
+    ml::json::append_to_frame_in_scenery(&s.root, &s, path);
     s.root.init_tree_based_on_mother_child_relations();
     //visual::Config cfg;
     //visual::FlyingCamera(&s.root, &cfg);
@@ -72,8 +72,8 @@ TEST_CASE("JsonTest: mini_scenery_with_stl", "[merlict]") {
 
 TEST_CASE("JsonTest: valid_color", "[merlict]") {
   auto j = R"({"red": [255, 0, 0]})"_json;
-  mct::json::Object o(j);
-  mct::Color c = o.color("red");
+  ml::json::Object o(j);
+  ml::Color c = o.color("red");
   CHECK(255 == c.r);
   CHECK(0 == c.g);
   CHECK(0 == c.b);
@@ -81,14 +81,14 @@ TEST_CASE("JsonTest: valid_color", "[merlict]") {
 
 TEST_CASE("JsonTest: color_rg_no_b", "[merlict]") {
   auto j = R"({"red": [255, 0]})"_json;
-  mct::json::Object o(j);
-  CHECK_THROWS_AS(o.color("red"), mct::json::BadTriple);
+  ml::json::Object o(j);
+  CHECK_THROWS_AS(o.color("red"), ml::json::BadTriple);
 }
 
 TEST_CASE("JsonTest: color_no_array_but_string", "[merlict]") {
   auto j = R"({"red": "woot"})"_json;
-  mct::json::Object o(j);
-  CHECK_THROWS_AS(o.color("red"), mct::json::BadTriple);
+  ml::json::Object o(j);
+  CHECK_THROWS_AS(o.color("red"), ml::json::BadTriple);
 }
 
 TEST_CASE("JsonTest: fine_colors", "[merlict]") {
@@ -101,22 +101,22 @@ TEST_CASE("JsonTest: fine_colors", "[merlict]") {
       ]
     }
     )"_json;
-    mct::ColorMap cmap;
-    mct::json::assert_key(j, "colors");
-    mct::json::add_colors(&cmap, j["colors"]);
+    ml::ColorMap cmap;
+    ml::json::assert_key(j, "colors");
+    ml::json::add_colors(&cmap, j["colors"]);
     CHECK(cmap.has("red"));
-    CHECK(mct::Color(255, 0, 0) == *cmap.get("red"));
+    CHECK(ml::Color(255, 0, 0) == *cmap.get("red"));
     CHECK(cmap.has("green"));
-    CHECK(mct::Color(0, 255, 0) == *cmap.get("green"));
+    CHECK(ml::Color(0, 255, 0) == *cmap.get("green"));
     CHECK(cmap.has("blue"));
-    CHECK(mct::Color(0, 0, 255) == *cmap.get("blue"));
+    CHECK(ml::Color(0, 0, 255) == *cmap.get("blue"));
 }
 
 TEST_CASE("JsonTest: empty_colors", "[merlict]") {
-    nl::json j = R"({"colors": {}})"_json;
-    mct::ColorMap cmap;
-    mct::json::assert_key(j, "colors");
-    mct::json::add_colors(&cmap, j["colors"]);
+    nlo::json j = R"({"colors": {}})"_json;
+    ml::ColorMap cmap;
+    ml::json::assert_key(j, "colors");
+    ml::json::add_colors(&cmap, j["colors"]);
     CHECK(0u == cmap.colors.size());
 }
 
@@ -174,9 +174,9 @@ TEST_CASE("JsonTest: parse_mini_scenery", "[merlict]") {
     }
     )"_json;
 
-    mct::json::Object o(jscenery);
-    mct::Scenery s;
-    mct::json::append_to_frame_in_scenery(&s.root, &s, o);
+    ml::json::Object o(jscenery);
+    ml::Scenery s;
+    ml::json::append_to_frame_in_scenery(&s.root, &s, o);
 
     CHECK("root" == s.root.get_name());
     CHECK(s.root.has_children());
@@ -188,7 +188,7 @@ TEST_CASE("JsonTest: parse_mini_scenery", "[merlict]") {
     CHECK(s.colors.has("leaf_green"));
     CHECK(s.colors.has("orange"));
 
-    const std::vector<mct::Frame*>* children = s.root.get_children();
+    const std::vector<ml::Frame*>* children = s.root.get_children();
     REQUIRE(1u == children->size());
     CHECK("tree" == children->at(0)->get_name());
 }
@@ -210,14 +210,14 @@ TEST_CASE("JsonTest: linear_interpolation_function", "[merlict]") {
     ]
     )"_json;
 
-    mct::json::Object o(j);
+    ml::json::Object o(j);
     CHECK(o.size() == 1);
-    const mct::json::Object &fo = o.obj(0);
+    const ml::json::Object &fo = o.obj(0);
     CHECK(fo.key("name"));
     CHECK(fo.key("argument_versus_value"));
 
-    mct::FunctionMap functions;
-    mct::json::add_functions(&functions, o);
+    ml::FunctionMap functions;
+    ml::json::add_functions(&functions, o);
     CHECK(functions.has("foo"));
     CHECK(functions.get("foo")->limits.upper == 5);
     CHECK(functions.get("foo")->limits.lower == 0);
@@ -240,12 +240,12 @@ TEST_CASE("JsonTest: Annulus", "[merlict]") {
       "children": []
     }
     )"_json;
-    mct::json::Object o(j);
-    mct::Scenery s;
-    mct::Frame* a = mct::json::add_Annulus(&s.root, &s, o);
+    ml::json::Object o(j);
+    ml::Scenery s;
+    ml::Frame* a = ml::json::add_Annulus(&s.root, &s, o);
     CHECK("ring" == a->get_name());
-    CHECK(mct::Vec3(0, 0, 3) == a->position_in_mother());
-    CHECK(mct::Rot3(0, 1, 0) == a->rotation_in_mother());
+    CHECK(ml::Vec3(0, 0, 3) == a->position_in_mother());
+    CHECK(ml::Rot3(0, 1, 0) == a->rotation_in_mother());
     CHECK(0u == a->get_children()->size());
 }
 
@@ -262,12 +262,12 @@ TEST_CASE("JsonTest: Cylinder_with_rot_and_pos", "[merlict]") {
       "children": []
     }
     )"_json;
-    mct::json::Object o(j);
-    mct::Scenery s;
-    mct::Frame* a = mct::json::add_Cylinder(&s.root, &s, o);
+    ml::json::Object o(j);
+    ml::Scenery s;
+    ml::Frame* a = ml::json::add_Cylinder(&s.root, &s, o);
     CHECK("cyl" == a->get_name());
-    CHECK(mct::Vec3(0, 0, 3) == a->position_in_mother());
-    CHECK(mct::Rot3(0, 1, 0) == a->rotation_in_mother());
+    CHECK(ml::Vec3(0, 0, 3) == a->position_in_mother());
+    CHECK(ml::Rot3(0, 1, 0) == a->rotation_in_mother());
     CHECK(0u == a->get_children()->size());
 }
 
@@ -283,9 +283,9 @@ TEST_CASE("JsonTest: Cylinder_with_start_pos_and_end_pos", "[merlict]") {
       "children": []
     }
     )"_json;
-    mct::json::Object o(j);
-    mct::Scenery s;
-    mct::Frame* a = mct::json::add_Cylinder(&s.root, &s, o);
+    ml::json::Object o(j);
+    ml::Scenery s;
+    ml::Frame* a = ml::json::add_Cylinder(&s.root, &s, o);
     CHECK("cyl" == a->get_name());
     CHECK(0u == a->get_children()->size());
 }
@@ -302,9 +302,9 @@ TEST_CASE("JsonTest: Triangle", "[merlict]") {
       "children": []
     }
     )"_json;
-    mct::json::Object o(j);
-    mct::Scenery s;
-    mct::Frame* a = mct::json::add_Triangle(&s.root, &s, o);
+    ml::json::Object o(j);
+    ml::Scenery s;
+    ml::Frame* a = ml::json::add_Triangle(&s.root, &s, o);
     CHECK("tri" == a->get_name());
     CHECK(0u == a->get_children()->size());
 }
@@ -321,9 +321,9 @@ TEST_CASE("JsonTest: Disc", "[merlict]") {
       "children": []
     }
     )"_json;
-    mct::Scenery s;
-    mct::json::Object o(j);
-    mct::Frame* a = mct::json::add_Disc(&s.root, &s, o);
+    ml::Scenery s;
+    ml::json::Object o(j);
+    ml::Frame* a = ml::json::add_Disc(&s.root, &s, o);
     CHECK("didi" == a->get_name());
     CHECK(0u == a->get_children()->size());
 }
@@ -347,8 +347,8 @@ TEST_CASE("JsonTest: PropagationConfig", "[merlict]") {
       "max_num_interactions_per_photon": 1337
     }
     )"_json;
-    mct::json::Object o(j);
-    mct::PropagationConfig cfg = mct::json::to_PropagationConfig(o);
+    ml::json::Object o(j);
+    ml::PropagationConfig cfg = ml::json::to_PropagationConfig(o);
     CHECK(1337u == cfg.max_num_interactions_per_photon);
 }
 
@@ -363,10 +363,10 @@ TEST_CASE("JsonTest: PointSource", "[merlict]") {
     "rot": [0, 0, 0]
   }
   )"_json;
-  mct::json::Object o(j);
-  std::vector<mct::Photon> phs = mct::json::to_photons(o);
+  ml::json::Object o(j);
+  std::vector<ml::Photon> phs = ml::json::to_photons(o);
   CHECK(137u == phs.size());
-  for (const mct::Photon &ph: phs) {
+  for (const ml::Photon &ph: phs) {
     CHECK(0.0 == ph.support().x);
     CHECK(2.0 == ph.support().y);
     CHECK(0.0 == ph.support().z);
@@ -388,10 +388,10 @@ TEST_CASE("JsonTest: PointSource_rotated", "[merlict]") {
     "rot": [0, 1.5705, 0]
   }
   )"_json;
-  mct::json::Object o(j);
-  std::vector<mct::Photon> phs = mct::json::to_photons(o);
+  ml::json::Object o(j);
+  std::vector<ml::Photon> phs = ml::json::to_photons(o);
   CHECK(13u == phs.size());
-  for (const mct::Photon &ph: phs) {
+  for (const ml::Photon &ph: phs) {
     CHECK(0.0 == ph.support().x);
     CHECK(2.0 == ph.support().y);
     CHECK(0.0 == ph.support().z);
@@ -413,10 +413,10 @@ TEST_CASE("JsonTest: ParallelDisc_rotated", "[merlict]") {
     "rot": [0, 1.5705, 0]
   }
   )"_json;
-  mct::json::Object o(j);
-  std::vector<mct::Photon> phs = mct::json::to_photons(o);
+  ml::json::Object o(j);
+  std::vector<ml::Photon> phs = ml::json::to_photons(o);
   CHECK(13u == phs.size());
-  for (const mct::Photon &ph: phs) {
+  for (const ml::Photon &ph: phs) {
     CHECK(ph.direction().x == Approx(-1.0).margin(0.1));
     CHECK(ph.direction().y == Approx(0.0).margin(0.1));
     CHECK(ph.direction().z == Approx(0.0).margin(0.1));
@@ -452,8 +452,8 @@ TEST_CASE("JsonTest: visual_config", "[merlict]") {
     }
   }
   )"_json;
-  mct::json::Object o(j);
-  mct::visual::Config cfg = mct::json::to_visual_config(o, "./");
+  ml::json::Object o(j);
+  ml::visual::Config cfg = ml::json::to_visual_config(o, "./");
   CHECK(cfg.max_interaction_depth == 41u);
   CHECK(cfg.preview.rows == 256u);
   CHECK(cfg.preview.cols == 144u);
@@ -464,7 +464,7 @@ TEST_CASE("JsonTest: visual_config", "[merlict]") {
   CHECK(cfg.snapshot.focal_length_over_aperture_diameter == 0.95);
   CHECK(cfg.snapshot.image_sensor_size_along_a_row == 0.07);
   CHECK(cfg.global_illumination.on);
-  CHECK(cfg.global_illumination.incoming_direction == mct::Vec3(.2, .3, 1.));
+  CHECK(cfg.global_illumination.incoming_direction == ml::Vec3(.2, .3, 1.));
   CHECK(cfg.photon_trajectories.radius == 0.15);
 }
 
@@ -479,8 +479,8 @@ TEST_CASE("JsonTest: linear_interpolation_function2", "[merlict]") {
     ]
   }
   )"_json;
-  mct::json::Object o(j);
-  std::vector<std::vector<double>> f = mct::json::json_to_vec_of_vecs(
+  ml::json::Object o(j);
+  std::vector<std::vector<double>> f = ml::json::json_to_vec_of_vecs(
     o.obj("argument_versus_value"));
   REQUIRE(4u == f.size());
   REQUIRE(2u == f.at(0).size());

@@ -122,7 +122,7 @@ void BinaryWriter::write_attribute_count(const uint16_t i) {
 
 void BinaryWriter::write_stl_header() {
     char text[81] =
-  "MCTRACER scientific ray tracing by Sebastian Achim Mueller ETH Zurich 2015    <>";
+  "MERLICT scientific ray tracing by Sebastian Achim Mueller ETH Zurich 2015     <>";
 // 0         1         2         3         4         5         6         7         8
 // 012345678901234567890123456789012345678901234567890123456789012345678901234567890
     fout.write(reinterpret_cast<const char*>(&text), 80*sizeof(char));

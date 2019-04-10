@@ -22,6 +22,13 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   endif()
 endif()
 
+if(USE_COV)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+    message(STATUS "The compiler flags ${CMAKE_CXX_FLAGS} are set for coverage reports.")
+else()
+    message(STATUS "The compiler flags ${CMAKE_CXX_FLAGS} are not set for coverage reports.")
+endif()
+
 # OpenCV
 find_package(OpenCV)
 include_directories(${OpenCV_INCLUDE_DIRS})

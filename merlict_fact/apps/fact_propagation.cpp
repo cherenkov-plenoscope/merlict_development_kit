@@ -16,12 +16,12 @@ namespace sp = signal_processing;
 
 
 static const char USAGE[] =
-R"(FACT IACT air showher propagation
+R"(FACT, Cherenkov-telescope propagation for air-showhers
 
     Usage:
-      mctFactPropagation -i=CORSIKA_PATH -o=OUTPUT_PATH [-r=SEED] [--all_truth]
-      mctFactPropagation (-h | --help)
-      mctFactPropagation --version
+      fact-propagation -i=CORSIKA_PATH -o=OUTPUT_PATH [-r=SEED] [--all_truth]
+      fact-propagation (-h | --help)
+      fact-propagation --version
 
     Options:
       -i --input=CORSIKA_PATH   CORSIKA run path.
@@ -265,7 +265,7 @@ int main(int argc, char* argv[]) {
         USAGE,
         { argv + 1, argv + argc },
         true,        // show help if requested
-        "mct 0.0");  // version string
+        "0.0");  // version string
 
     re::ospath::Path out_path(args.find("--output")->second.asString());
     re::ospath::Path input_path(args.find("--input")->second.asString());

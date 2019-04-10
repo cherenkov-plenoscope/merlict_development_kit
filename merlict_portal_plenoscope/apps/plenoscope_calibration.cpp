@@ -11,16 +11,16 @@ namespace ml = merlict;
 
 
 static const char USAGE[] =
-R"(Plenoscope light field calibration
+R"(Light-field-calibration for the Portal Cherenkov-plenoscope
 
     Usage:
-      mctPlenoscopeCalibration -s=SCENERY_PATH -n=NUMBER_MEGA_PHOTONS -o=OUTPUT_PATH
-      mctPlenoscopeCalibration (-h | --help)
-      mctPlenoscopeCalibration --version
+      plenoscope-calibration -s=SCENERY_PATH -n=NUMBER_MEGA_PHOTONS -o=OUTPUT_PATH
+      plenoscope-calibration (-h | --help)
+      plenoscope-calibration --version
 
     Options:
       -s --scenery=SCENERY_PATH                     Scenery directory path.
-      -n --num_mega_photons=NUMBER_MEGA_PHOTONS  Number count [Mega Photons]
+      -n --num_mega_photons=NUMBER_MEGA_PHOTONS     Number count [Mega Photons]
                                                     of calibration photons to be
                                                     emitted.
       -o --output=OUTPUT_PATH                       Output path.
@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
             USAGE,
             { argv + 1, argv + argc },
             true,        // show help if requested
-            "mct 0.1");  // version string
+            "0.1");  // version string
 
         int num_mega_photons = 0;
         try {

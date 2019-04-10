@@ -18,12 +18,12 @@ namespace ml = merlict;
 
 
 static const char USAGE[] =
-R"(Plenoscope raw photon propagation
+R"(Propagation of raw photons for the Portal Cherenkov-plenoscope
 
     Usage:
-      mctPlenoscopeRawPhotonPropagation -l=LIXEL_STATISTICS_PATH -c=CONFIG_PATH -i=PHOTON_PATH -o=OUTPUT_PATH [-r=SEED] [--all_truth]
-      mctPlenoscopeRawPhotonPropagation (-h | --help)
-      mctPlenoscopeRawPhotonPropagation --version
+      plenoscope-raw-photon-propagation -l=LIXEL_STATISTICS_PATH -c=CONFIG_PATH -i=PHOTON_PATH -o=OUTPUT_PATH [-r=SEED] [--all_truth]
+      plenoscope-raw-photon-propagation (-h | --help)
+      plenoscope-raw-photon-propagation --version
 
     Options:
       -l --lixel=LIXEL_PATH     Light field calibration directory of the plenoscope.
@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
         USAGE,
         { argv + 1, argv + argc },
         true,        // show help if requested
-        "0.0.1");    // version string
+        "0.1");    // version string
 
     ml::ospath::Path lixel_calib_path(args.find("--lixel")->second.asString());
     ml::ospath::Path config_path(args.find("--config")->second.asString());

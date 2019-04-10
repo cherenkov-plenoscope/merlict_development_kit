@@ -12,7 +12,7 @@ namespace visual {
 void append_image_to_file(const Image &img, std::ostream &fout) {
     std::stringstream head;
     head << "P6\n";
-    head << "# CREATOR: MCTRACER\n";
+    head << "# CREATOR: MERLICT\n";
     head << int(img.num_cols) << " ";
     head << int(img.num_rows) << "\n";
     head << "255\n";

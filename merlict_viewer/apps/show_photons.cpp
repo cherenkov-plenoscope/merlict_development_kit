@@ -12,9 +12,9 @@ static const char USAGE[] =
 R"(Show a scenery with photons
 
     Usage:
-      mctShow --scenery=SCENERY_PATH --input=PHOTON_PATH [--config=CONFIG_PATH] [-r=SEED]
-      mctShow (-h | --help)
-      mctShow --version
+      show-photons --scenery=SCENERY_PATH --input=PHOTON_PATH [--config=CONFIG_PATH] [-r=SEED]
+      show-photons (-h | --help)
+      show-photons --version
 
     Options:
       -s --scenery=SCENERY_PATH     Scenery file path.
@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
         USAGE,
         { argv + 1, argv + argc },
         true,        // show help if requested
-        "mct 0.1");  // version string
+        "0.1");  // version string
 
     ml::ospath::Path scenery_path(args.find("--scenery")->second.asString());
     ml::ospath::Path photon_path(args.find("--input")->second.asString());

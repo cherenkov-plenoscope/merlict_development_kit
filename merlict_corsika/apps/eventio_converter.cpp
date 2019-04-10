@@ -9,15 +9,17 @@
 #include "merlict/merlict.h"
 
 namespace fs = std::experimental::filesystem;
-namespace mct = merlict;
+namespace ml = merlict;
 
 static const char USAGE[] =
-R"(EventIO converter
+R"(eventio-converter
+Un-packs a CORSIKA eventio-file into its individual files such as run-header,
+event-header, and photon-bunches.
 
   Usage:
-    mctEventIOConverter -i=CORSIKA_PATH -o=OUTPUT_PATH
-    mctEventIOConverter (-h | --help)
-    mctEventIOConverter --version
+    eventio-converter -i=CORSIKA_PATH -o=OUTPUT_PATH
+    eventio-converter (-h | --help)
+    eventio-converter --version
 
   Options:
     -i --input=CORSIKA_PATH   EventIO CORSIKA run path.
@@ -32,10 +34,10 @@ int main(int argc, char* argv[]) {
       USAGE,
       { argv + 1, argv + argc },
       true,        // show help if requested
-      "mct 0.0");
+      "0.0");
 
-    mct::ospath::Path input_path(args.find("--input")->second.asString());
-    mct::ospath::Path out_path(args.find("--output")->second.asString());
+    ml::ospath::Path input_path(args.find("--input")->second.asString());
+    ml::ospath::Path out_path(args.find("--output")->second.asString());
 
     fs::create_directory(out_path.path);
 
@@ -43,24 +45,24 @@ int main(int argc, char* argv[]) {
 
     corsika::write_273_f4_to_path(
       corsika_run.header.raw,
-      mct::ospath::join(out_path.path, "corsika_run_header.bin"));
+      ml::ospath::join(out_path.path, "corsika_run_header.bin"));
 
     unsigned int event_counter = 1;
     while (corsika_run.has_still_events_left()) {
       eventio::Event event = corsika_run.next_event();
 
-      mct::ospath::Path event_path(
-        mct::ospath::join(out_path.path, std::to_string(event_counter)));
+      ml::ospath::Path event_path(
+        ml::ospath::join(out_path.path, std::to_string(event_counter)));
 
       fs::create_directory(event_path.path);
 
       corsika::write_273_f4_to_path(
         event.header.raw,
-        mct::ospath::join(event_path.path, "corsika_event_header.bin"));
+        ml::ospath::join(event_path.path, "corsika_event_header.bin"));
 
       eventio::write_photon_bunches_to_path(
         event.photons,
-        mct::ospath::join(event_path.path, "air_shower_photon_bunches.bin"));
+        ml::ospath::join(event_path.path, "air_shower_photon_bunches.bin"));
 
       event_counter++;
     }

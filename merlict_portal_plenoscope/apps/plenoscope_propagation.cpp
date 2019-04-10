@@ -19,12 +19,12 @@ namespace ml = merlict;
 
 
 static const char USAGE[] =
-R"(Plenoscope air showher propagation
+R"(Propagation of air-showers for the Portal Cherenkov-plenoscope
 
     Usage:
-      mctPlenoscopePropagation -l=LIXEL_STATISTICS_PATH -c=CONFIG_PATH -i=CORSIKA_PATH -o=OUTPUT_PATH [-r=SEED] [--all_truth]
-      mctPlenoscopePropagation (-h | --help)
-      mctPlenoscopePropagation --version
+      plenoscope-propagation -l=LIXEL_STATISTICS_PATH -c=CONFIG_PATH -i=CORSIKA_PATH -o=OUTPUT_PATH [-r=SEED] [--all_truth]
+      plenoscope-propagation (-h | --help)
+      plenoscope-propagation --version
 
     Options:
       -l --lixel=LIXEL_PATH     Light field calibration directory of the plenoscope.
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
         USAGE,
         { argv + 1, argv + argc },
         true,        // show help if requested
-        "0.0.0");    // version string
+        "0.0");    // version string
 
     ml::ospath::Path config_path(args.find("--config")->second.asString());
     ml::ospath::Path out_path(args.find("--output")->second.asString());

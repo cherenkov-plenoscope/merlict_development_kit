@@ -115,7 +115,7 @@ TEST_CASE("EventIoPhotonFactoryTest: execute_atmospheric_absorption", "[merlict]
     // In Corsika photons can have a 'weight' to represent a bunch of photons.
     // This was introduced in Corsika to save computations and disk space.
     // Corsika does not recomend to have weights above 5.
-    // Mctracer has no concet of weighted photon bunches.
+    // Merlict has no concet of weighted photon bunches.
     // We force Corsika to produce single photons, i.e. the maximum weight
     // in the Corsika output is 1.0.
     // A weight below 1.0 means, that the photon passed Corsika's atmosphere

@@ -6,12 +6,12 @@ namespace ml = merlict;
 
 
 static const char USAGE[] =
-R"(Photon propagation
+R"(Photon-propagation
 
     Usage:
-      mctPropagate -s=SCENERY_PATH -c=CONFIG_PATH -i=INPUT_PATH -o=OUTPUT_PATH [-r=SEED] [-b]
-      mctPropagate (-h | --help)
-      mctPropagate --version
+      propagate -s=SCENERY_PATH -c=CONFIG_PATH -i=INPUT_PATH -o=OUTPUT_PATH [-r=SEED] [-b]
+      propagate (-h | --help)
+      propagate --version
 
     Options:
       -s --scenery=SCENERY_PATH Scenery path.
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
         USAGE,
         { argv + 1, argv + argc },
         true,        // show help if requested
-        "mct 0.1");  // version string
+        "0.1");  // version string
 
     ml::ospath::Path out_path(args.find("--output")->second.asString());
     ml::ospath::Path scenery_path(args.find("--scenery")->second.asString());
