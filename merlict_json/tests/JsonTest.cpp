@@ -58,16 +58,21 @@ TEST_CASE("JsonTest: object_wrapper_bad_vec3", "[merlict]") {
 TEST_CASE("JsonTest: empty_path", "[merlict]") {
     const std::string path = "";
     ml::Scenery s;
-    CHECK_THROWS_AS(ml::json::append_to_frame_in_scenery(&s.root, &s, path), std::runtime_error);
+    CHECK_THROWS_AS(
+      ml::json::append_to_frame_in_scenery(&s.root, &s, path),
+      std::runtime_error);
 }
 
 TEST_CASE("JsonTest: mini_scenery_with_stl", "[merlict]") {
-    const std::string path =  "merlict/tests/resources/scenery/mini_scenery.json";
+    const std::string path =
+      "merlict/"
+      "tests/"
+      "resources/"
+      "scenery/"
+      "mini_scenery.json";
     ml::Scenery s;
     ml::json::append_to_frame_in_scenery(&s.root, &s, path);
     s.root.init_tree_based_on_mother_child_relations();
-    //visual::Config cfg;
-    //visual::FlyingCamera(&s.root, &cfg);
 }
 
 TEST_CASE("JsonTest: valid_color", "[merlict]") {
@@ -366,7 +371,7 @@ TEST_CASE("JsonTest: PointSource", "[merlict]") {
   ml::json::Object o(j);
   std::vector<ml::Photon> phs = ml::json::to_photons(o);
   CHECK(137u == phs.size());
-  for (const ml::Photon &ph: phs) {
+  for (const ml::Photon &ph : phs) {
     CHECK(0.0 == ph.support().x);
     CHECK(2.0 == ph.support().y);
     CHECK(0.0 == ph.support().z);
@@ -391,7 +396,7 @@ TEST_CASE("JsonTest: PointSource_rotated", "[merlict]") {
   ml::json::Object o(j);
   std::vector<ml::Photon> phs = ml::json::to_photons(o);
   CHECK(13u == phs.size());
-  for (const ml::Photon &ph: phs) {
+  for (const ml::Photon &ph : phs) {
     CHECK(0.0 == ph.support().x);
     CHECK(2.0 == ph.support().y);
     CHECK(0.0 == ph.support().z);
@@ -416,7 +421,7 @@ TEST_CASE("JsonTest: ParallelDisc_rotated", "[merlict]") {
   ml::json::Object o(j);
   std::vector<ml::Photon> phs = ml::json::to_photons(o);
   CHECK(13u == phs.size());
-  for (const ml::Photon &ph: phs) {
+  for (const ml::Photon &ph : phs) {
     CHECK(ph.direction().x == Approx(-1.0).margin(0.1));
     CHECK(ph.direction().y == Approx(0.0).margin(0.1));
     CHECK(ph.direction().z == Approx(0.0).margin(0.1));
@@ -495,4 +500,57 @@ TEST_CASE("JsonTest: linear_interpolation_function2", "[merlict]") {
   REQUIRE(2u == f.at(3).size());
   CHECK(300e-9 == f.at(3).at(0));
   CHECK(0.254 == f.at(3).at(1));
+}
+
+TEST_CASE("JsonTest: setting_sensors", "[merlict]") {
+    auto jscenery = R"(
+    { "functions":[],
+      "colors": [],
+      "children": [
+        {
+          "type": "Frame",
+          "name": "tree",
+          "pos": [5, 5, -2],
+          "rot": [0, 0, 0],
+          "children": [
+            {
+              "type": "Sphere",
+              "name": "leaf_ball",
+              "pos": [0, 0, 3],
+              "rot": [0, 0, 0],
+              "radius": 1.5,
+              "surface": {},
+              "children": [],
+              "sensor_id": 13
+            },
+            {
+              "type": "Cylinder",
+              "name": "pole",
+              "start_pos": [0, 0, 0],
+              "end_pos": [0, 0, 1.5],
+              "radius": 0.25,
+              "surface": {},
+              "children": [],
+              "sensor_id": 37
+            }
+          ]
+        }
+      ]
+    }
+    )"_json;
+
+    ml::json::Object o(jscenery);
+    ml::Scenery s;
+    ml::json::append_to_frame_in_scenery(&s.root, &s, o);
+
+    REQUIRE(s.sensors.sensors.size() == 2);
+    CHECK_THROWS_AS(s.sensors.get(0u), ml::ResourceMap::NoSuchKey);
+    CHECK(s.sensors.has(13u));
+    CHECK(s.sensors.has(37u));
+
+    CHECK(s.sensors.get(37u)->id == 37u);
+    CHECK(s.sensors.get(37u)->frame->get_name() == "pole");
+
+    CHECK(s.sensors.get(13u)->id == 13u);
+    CHECK(s.sensors.get(13u)->frame->get_name() == "leaf_ball");
 }

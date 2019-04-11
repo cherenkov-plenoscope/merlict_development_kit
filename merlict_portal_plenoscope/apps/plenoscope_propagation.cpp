@@ -22,15 +22,15 @@ static const char USAGE[] =
 R"(Propagation of air-showers for the Portal Cherenkov-plenoscope
 
     Usage:
-      plenoscope-propagation -l=LIXEL_STATISTICS_PATH -c=CONFIG_PATH -i=CORSIKA_PATH -o=OUTPUT_PATH [-r=SEED] [--all_truth]
+      plenoscope-propagation -l=PATH -c=PATH -i=PATH -o=PATH [-r=SEED] [--all_truth]
       plenoscope-propagation (-h | --help)
       plenoscope-propagation --version
 
     Options:
-      -l --lixel=LIXEL_PATH     Light field calibration directory of the plenoscope.
-      -c --config=CONFIG_PATH   Config path.
-      -i --input=CORSIKA_PATH   CORSIKA run path.
-      -o --output=OUTPUT_PATH   Output path.
+      -l --lixel=PATH           Light field calibration directory of the plenoscope.
+      -c --config=PATH          Config path.
+      -i --input=PATH           CORSIKA run path.
+      -o --output=PATH          Output path.
       -r --random_seed=SEED     Seed for pseudo random number generator.
       --all_truth               Write all simulation truth avaiable into the output.
       -h --help                 Show this screen.

@@ -12,14 +12,14 @@ static const char USAGE[] =
 R"(Show a scenery with photons
 
     Usage:
-      show-photons --scenery=SCENERY_PATH --input=PHOTON_PATH [--config=CONFIG_PATH] [-r=SEED]
+      show-photons --scenery=PATH --input=PATH [--config=PATH] [-r=SEED]
       show-photons (-h | --help)
       show-photons --version
 
     Options:
-      -s --scenery=SCENERY_PATH     Scenery file path.
-      -i --input=INPUT_PATH         CORSIKA run path.
-      -c --config=CONFIG_PATH       Visual config file path.
+      -s --scenery=PATH             Scenery file path.
+      -i --input=PATH               CORSIKA run path.
+      -c --config=PATH              Visual config file path.
       -r --random_seed=SEED         Seed for pseudo random number generator.
       -h --help                     Show this screen.
       --version                     Show version.

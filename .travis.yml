@@ -14,7 +14,7 @@ before_install:
     # C++17
     - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
     - sudo apt-get update -qq
-    
+
 install:
     - sudo apt-get install -qq libopencv-dev
     # C++17
@@ -34,8 +34,8 @@ script:
     - cd ..
     - ./build/merlict-test
 
-    - echo "trying out one_source.py"
-    - ./one_source.py
+    - echo "trying out amalgamate.py"
+    - ./amalgamate.py
     - g++ merlict_test.cpp merlict.cpp -o merlict_test -O1
     - ./merlict_test
 

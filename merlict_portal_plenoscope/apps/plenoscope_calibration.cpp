@@ -14,16 +14,16 @@ static const char USAGE[] =
 R"(Light-field-calibration for the Portal Cherenkov-plenoscope
 
     Usage:
-      plenoscope-calibration -s=SCENERY_PATH -n=NUMBER_MEGA_PHOTONS -o=OUTPUT_PATH
+      plenoscope-calibration -s=PATH -n=NUMBER -o=PATH
       plenoscope-calibration (-h | --help)
       plenoscope-calibration --version
 
     Options:
-      -s --scenery=SCENERY_PATH                     Scenery directory path.
-      -n --num_mega_photons=NUMBER_MEGA_PHOTONS     Number count [Mega Photons]
+      -s --scenery=PATH                             Scenery directory path.
+      -n --num_mega_photons=NUMBER                  Number count [Mega Photons]
                                                     of calibration photons to be
                                                     emitted.
-      -o --output=OUTPUT_PATH                       Output path.
+      -o --output=PATH                              Output path.
       -h --help                                     Show this screen.
       --version                                     Show version.
 )";

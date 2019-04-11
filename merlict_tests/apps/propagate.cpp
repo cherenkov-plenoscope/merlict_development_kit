@@ -9,15 +9,15 @@ static const char USAGE[] =
 R"(Photon-propagation
 
     Usage:
-      propagate -s=SCENERY_PATH -c=CONFIG_PATH -i=INPUT_PATH -o=OUTPUT_PATH [-r=SEED] [-b]
+      propagate -s=PATH -c=PATH -i=PATH -o=PATH [-r=SEED] [-b]
       propagate (-h | --help)
       propagate --version
 
     Options:
-      -s --scenery=SCENERY_PATH Scenery path.
-      -c --config=CONFIG_PATH   Config path to steer the simulation.
-      -i --input=INPUT_PATH     Photon path (e.g. a CORSIKA run).
-      -o --output=OUTPUT_PATH   Output path.
+      -s --scenery=PATH         Scenery path.
+      -c --config=PATH          Config path to steer the simulation.
+      -i --input=PATH           Photon path (e.g. a CORSIKA run).
+      -o --output=PATH          Output path.
       -r --random_seed=SEED     Seed for pseudo random number generator.
       -b --binary               Exports a binary float32 table for each sensor.
       -h --help                 Show this screen.

@@ -19,13 +19,13 @@ static const char USAGE[] =
 R"(FACT, Cherenkov-telescope propagation for air-showhers
 
     Usage:
-      fact-propagation -i=CORSIKA_PATH -o=OUTPUT_PATH [-r=SEED] [--all_truth]
+      fact-propagation -i=PATH -o=PATH [-r=SEED] [--all_truth]
       fact-propagation (-h | --help)
       fact-propagation --version
 
     Options:
-      -i --input=CORSIKA_PATH   CORSIKA run path.
-      -o --output=OUTPUT_PATH   Output path.
+      -i --input=PATH           CORSIKA run path.
+      -o --output=PATH          Output path.
       -r --random_seed=SEED     Seed for pseudo random number generator.
       -h --help                 Show this screen.
       --version                 Show version.

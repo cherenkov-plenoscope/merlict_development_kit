@@ -11,13 +11,13 @@ static const char USAGE[] =
 R"(Show a scenery
 
     Usage:
-      cameraserver --scenery=SCENERY_PATH [--config=CONFIG_PATH]
+      cameraserver --scenery=PATH [--config=PATH]
       cameraserver (-h | --help)
       cameraserver --version
 
     Options:
-      -s --scenery=SCENERY_PATH     Scenery file path.
-      -c --config=CONFIG_PATH       Visual config file path.
+      -s --scenery=PATH             Scenery file path.
+      -c --config=PATH              Visual config file path.
       -h --help                     Show this screen.
       --version                     Show version.
 )";

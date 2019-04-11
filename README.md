@@ -49,12 +49,12 @@ cd ..
 At the moment we are trying to improve the build system, trying to make
 merlict a header only library.
 
-At the moment there is a tool called `one_source.py` which can convert the current merlict
+At the moment there is a tool called `amalgamate.py` which can convert the current merlict
 sources into one header and one cpp file. It can be used like:
 
 ```bash
 cd <merlict-development-kit folder>
-./one_source.py
+./amalgamate.py
 ```
 
 It creates these 2 files `merlict.h` and `merlict.cpp` and in addition it creates

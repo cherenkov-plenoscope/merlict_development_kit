@@ -214,8 +214,14 @@ void make_children(Frame* mother, Scenery* scenery, const Object &o) {
         std::string type = jchild.st("type");
         if (has_key(j2s, type)) {
             json_to_frame us = get(j2s, type);
+            Frame* child = us(mother, scenery, jchild);
+            if (jchild.key("sensor_id")) {
+                scenery->sensors.add(
+                    jchild.u8("sensor_id"),
+                    child);
+            }
             make_children(
-                us(mother, scenery, jchild),
+                child,
                 scenery,
                 jchild.obj("children"));
         }
@@ -390,10 +396,10 @@ Frame* add_BiConvexLensHex(
 ) {
     BiConvexLensHexBound* lens = mother->add<BiConvexLensHexBound>();
     set_frame(lens, o);
+    set_surface(lens, scenery, o);
     lens->set_curvature_radius_and_outer_hex_radius(
         o.f8("curvature_radius"),
         o.f8("outer_radius"));
-    set_surface(lens, scenery, o);
     return lens;
 }
 

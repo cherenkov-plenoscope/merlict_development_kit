@@ -17,13 +17,13 @@ Un-packs a CORSIKA eventio-file into its individual files such as run-header,
 event-header, and photon-bunches.
 
   Usage:
-    eventio-converter -i=CORSIKA_PATH -o=OUTPUT_PATH
+    eventio-converter -i=PATH -o=PATH
     eventio-converter (-h | --help)
     eventio-converter --version
 
   Options:
-    -i --input=CORSIKA_PATH   EventIO CORSIKA run path.
-    -o --output=OUTPUT_PATH   Output path.
+    -i --input=PATH           EventIO CORSIKA run path.
+    -o --output=PATH          Output path.
     -h --help                 Show this screen.
     --version                 Show version.
 )";
