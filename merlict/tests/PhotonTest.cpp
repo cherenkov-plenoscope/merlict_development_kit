@@ -7,6 +7,12 @@
 #include "catch.hpp"
 namespace ml = merlict;
 
+TEST_CASE("PhotonTest: default_ctor", "[merlict]") {
+    ml::Photon pho;
+    CHECK(pho.wavelength == 0.);
+    CHECK(pho.num_interactions() == 0);
+}
+
 
 TEST_CASE("PhotonTest: creation", "[merlict]") {
     double wavelength = 433e-9;

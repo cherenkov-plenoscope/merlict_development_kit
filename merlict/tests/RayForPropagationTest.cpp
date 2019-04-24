@@ -3,6 +3,19 @@
 #include "merlict/merlict.h"
 namespace ml = merlict;
 
+TEST_CASE("RayForPropagationTest: default_ctor", "[merlict]") {
+    ml::RayForPropagation prop_ray;
+    CHECK(prop_ray.simulation_truth_id == 0);
+
+    CHECK(prop_ray.support().x == 0.);
+    CHECK(prop_ray.support().y == 0.);
+    CHECK(prop_ray.support().z == 0.);
+
+    CHECK(prop_ray.direction().x == 0.);
+    CHECK(prop_ray.direction().y == 0.);
+    CHECK(prop_ray.direction().z == 1.);
+}
+
 
 TEST_CASE("RayForPropagationTest: Constructor_using_vectors", "[merlict]") {
     ml::Vec3 support(0.0, 0.0, 1.0);

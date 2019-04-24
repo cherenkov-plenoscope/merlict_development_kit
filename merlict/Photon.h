@@ -15,6 +15,7 @@ class Photon :public RayForPropagation{
 
  public:
     double wavelength;
+    Photon();
     Photon(
         const Vec3 support,
         const Vec3 direction,

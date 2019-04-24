@@ -45,6 +45,7 @@ class RayForPropagation :public Ray{
     // encodes the index of the input photons e.g. out of a CORSIKA Cherenkov
     // photon file
 
+    RayForPropagation();
     RayForPropagation(const Vec3 support, const Vec3 direction);
     void push_back_intersection_and_interaction(
         const Intersection& interact,

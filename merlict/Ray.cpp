@@ -7,7 +7,10 @@
 
 namespace merlict {
 
-Ray::Ray() {}
+Ray::Ray():
+    support_(0., 0., 0.),
+    direction_(0., 0., 1.)
+{}
 
 Ray::Ray(const Vec3 support, const Vec3 direction) {
     set_support_and_direction(support, direction);

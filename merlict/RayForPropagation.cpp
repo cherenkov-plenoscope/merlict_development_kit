@@ -26,6 +26,9 @@ std::string interaction_str(Interaction type) {
     }
 }
 
+RayForPropagation::RayForPropagation():
+    simulation_truth_id(0)
+{ }
 
 RayForPropagation::RayForPropagation(
     const Vec3 support,

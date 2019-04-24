@@ -67,6 +67,71 @@ g++ merlict_test.cpp merlict.cpp -o merlict_test
 ./merlict_test
 ```
 
+
+---
+
+# Playing with Python
+
+## TLDR
+
+Do this:
+
+    ./one_source.py && swig -c++ -python -o merlict_wrap.cpp merlict.i && pip install -e .
+    pytest
+
+## Longer form
+
+For Python Wrapping, we started with the *two file version of merlict*, i.e.
+with `merlict.h` and `merlict.cpp`, this we assume this makes the build
+process of the wrapped python code simpler.
+
+So the very first step is, make the two file following the steps in the
+chapter above this one.
+
+Currently this is all pretty manual and cumbersome, but we plan to streamline
+everything once we think it works more or less.
+
+As a first step, generate the wrapper code using swig
+(I use SWIG Version 3.0.12 installed from conda) like this:
+
+    swig -c++ -python -o merlict_wrap.cpp merlict.i
+
+This will generate the files `merlict_wrap.cpp` and the file `merlict.py` from
+the so called *interface file* `merlict.i`. You might see a couple of warnings
+we are aware of them and working on them.
+
+Do not yet try to use the `merlict.py` file ... it does not yet work. As a
+next step we need to compile the `merlict_wrap.cpp` file into a shared object
+file. The compiler call for this is a bit cumbersome, since one needs to
+find the `Python.h` file for the Python version, one is currently using.
+In order to avoid this, we wrote a `setup.py` file for you.
+
+So the next call is just:
+
+    python setup.py build_ext --inplace
+
+You will see a lot of warnings and the last few compilatio or linking steps
+take a while ... so one might get the impression something hangs ... just give
+it a few seconds. (On my system it takes about 30sec)
+
+The result of this call is a file named like this:
+
+    _merlict.cpython-37m-x86_64-linux-gnu.so
+
+Depending on your python version the name might differ a bit.
+
+
+Now since we are sure, the build worked and we had no errors, we can install
+`merlict` with pip locally to play with it.
+
+    pip install -e .
+
+Now you can execute the python tests by simply typing
+
+    pytest
+
+---
+
 ## style
 - 80 columns limit
 - whitespaces instead of tabulators

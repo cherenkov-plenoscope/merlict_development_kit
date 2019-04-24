@@ -2,3 +2,15 @@ merlict.cpp
 merlict.h
 merlict_test.cpp
 build/
+merlict_test
+
+# Python wrapper
+merlict_wrap.cpp
+merlict.py
+merlict.o
+_merlict.cpython*
+merlict.egg-info/
+
+# typical python stuff
+__pycache__/
+.pytest_cache/
