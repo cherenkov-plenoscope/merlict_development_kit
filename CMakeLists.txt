@@ -30,9 +30,11 @@ else()
 endif()
 
 # OpenCV
-find_package(OpenCV)
-include_directories(${OpenCV_INCLUDE_DIRS})
-link_directories(${OpenCV_LIB_DIR})
+find_package(OpenCV QUIET)
+if(OpenCV_FOUND)
+    include_directories(${OpenCV_INCLUDE_DIRS})
+    link_directories(${OpenCV_LIB_DIR})
+endif()
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 set(
@@ -49,20 +51,32 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/merlict_multi_thread")
 add_subdirectory("${PROJECT_SOURCE_DIR}/merlict_portal_plenoscope")
 add_subdirectory("${PROJECT_SOURCE_DIR}/merlict_signal_processing")
 add_subdirectory("${PROJECT_SOURCE_DIR}/docopt")
-add_subdirectory("${PROJECT_SOURCE_DIR}/merlict_viewer")
+if(OpenCV_FOUND)
+    add_subdirectory("${PROJECT_SOURCE_DIR}/merlict_viewer")
+endif()
 
 # merlict library
 add_library(lib_merlict_dev SHARED ${SOURCE})
 include_directories(/usr/include)
 include_directories(/usr/local/include)
-target_link_libraries(lib_merlict_dev ${OpenCV_LIBS})
+if(OpenCV_FOUND)
+    target_link_libraries(lib_merlict_dev ${OpenCV_LIBS})
+endif()
 
 #apps
-add_executable(
-    merlict-show
-    merlict_viewer/apps/show.cpp)
-target_link_libraries(merlict-show lib_merlict_dev)
-target_link_libraries(merlict-show docopt)
+if(OpenCV_FOUND)
+    add_executable(
+        merlict-show
+        merlict_viewer/apps/show.cpp)
+    target_link_libraries(merlict-show lib_merlict_dev)
+    target_link_libraries(merlict-show docopt)
+
+    add_executable(
+        merlict-show-photons
+        merlict_viewer/apps/show_photons.cpp)
+    target_link_libraries(merlict-show-photons lib_merlict_dev)
+    target_link_libraries(merlict-show-photons docopt)
+endif()
 
 add_executable(
     merlict-cameraserver
@@ -75,12 +89,6 @@ add_executable(
     merlict_tests/apps/propagate.cpp)
 target_link_libraries(merlict-propagate lib_merlict_dev)
 target_link_libraries(merlict-propagate docopt)
-
-add_executable(
-    merlict-show-photons
-    merlict_viewer/apps/show_photons.cpp)
-target_link_libraries(merlict-show-photons lib_merlict_dev)
-target_link_libraries(merlict-show-photons docopt)
 
 add_executable(
     merlict-plenoscope-calibration
@@ -127,16 +135,30 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/merlict_viewer/tests")
 add_subdirectory("${PROJECT_SOURCE_DIR}/merlict_tests")
 add_subdirectory("${PROJECT_SOURCE_DIR}/merlict_portal_plenoscope/tests")
 add_subdirectory("${PROJECT_SOURCE_DIR}/merlict_signal_processing/tests")
-add_executable(
-    merlict-test
-    merlict/tests/test.cpp
-    ${TEST_SOURCE_PLENOSCOPE}
-    ${TEST_SOURCE_SIGNAL_PROCESSING}
-    ${TEST_SOURCE_MERLICT}
-    ${TEST_SOURCE_MERLICT_CORSIKA}
-    ${TEST_SOURCE_MERLICT_VISUAL}
-    ${TEST_SOURCE_MERLICT_JSON}
-    ${TEST_SOURCE_MERLICT_MULTI_THREAD}
-    ${TEST_SOURCE_MERLICT_VIEWER}
-    ${TEST_SOURCE_MERLICT_INTEGRATION})
+if(OpenCV_FOUND)
+    add_executable(
+        merlict-test
+        merlict/tests/test.cpp
+        ${TEST_SOURCE_PLENOSCOPE}
+        ${TEST_SOURCE_SIGNAL_PROCESSING}
+        ${TEST_SOURCE_MERLICT}
+        ${TEST_SOURCE_MERLICT_CORSIKA}
+        ${TEST_SOURCE_MERLICT_VISUAL}
+        ${TEST_SOURCE_MERLICT_JSON}
+        ${TEST_SOURCE_MERLICT_MULTI_THREAD}
+        ${TEST_SOURCE_MERLICT_VIEWER}
+        ${TEST_SOURCE_MERLICT_INTEGRATION})
+else()
+    add_executable(
+        merlict-test
+        merlict/tests/test.cpp
+        ${TEST_SOURCE_PLENOSCOPE}
+        ${TEST_SOURCE_SIGNAL_PROCESSING}
+        ${TEST_SOURCE_MERLICT}
+        ${TEST_SOURCE_MERLICT_CORSIKA}
+        ${TEST_SOURCE_MERLICT_VISUAL}
+        ${TEST_SOURCE_MERLICT_JSON}
+        ${TEST_SOURCE_MERLICT_MULTI_THREAD}
+        ${TEST_SOURCE_MERLICT_INTEGRATION})
+endif()
 target_link_libraries(merlict-test lib_merlict_dev)

@@ -3,7 +3,6 @@
 #include "catch.hpp"
 #include "merlict/merlict.h"
 #include <iostream>
-#include "merlict_viewer/FlyingCamera.h"
 namespace ml = merlict;
 
 
@@ -79,9 +78,6 @@ struct BiConvexLensTest {
         //-------------------------
 
         scenery.root.init_tree_based_on_mother_child_relations();
-
-        //visual::Config cfg;
-        //visual::FlyingCamera(&scenery.root, &cfg);
     }
 };
 
@@ -142,9 +138,4 @@ TEST_CASE("BiConvexLensTest: send_photons_frontal_into_lens_with_offset", "[merl
     CHECK(1.5e-3 == Approx(ml::sensor::point_spread_std_dev(sen->photon_arrival_history)).margin(1e-3));
 
     CHECK(1.0 == Approx(static_cast<double>(sen->photon_arrival_history.size())/static_cast<double>(num_photons_emitted)).margin(10e-2));
-
-    /*FlyingCamera free(
-        env.root_frame,
-        env.config
-    );*/
 }
