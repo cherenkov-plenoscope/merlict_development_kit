@@ -124,8 +124,10 @@ void FlyingCamera::enter_interactive_display() {
         if (time_to_print_help())
             print_help();
 
-        if (key_stroke_requires_image_update)
+        if (key_stroke_requires_image_update) {
+            std::cout << camera_status() << std::endl;
             update_display_preview();
+        }
 
         key_stroke_requires_image_update = true;
         user_input_key = wait_for_user_key_stroke();
@@ -267,10 +269,29 @@ void FlyingCamera::mouse_button_event(
         return;
 }
 
+std::string FlyingCamera::camera_status()const {
+    std::stringstream out;
+    out <<  "  pos-x/m    pos-y/m    pos-z/m     "
+            "rot-y/deg  rot-z/deg      fov/deg   3D-off/m\n";
+    char buffer[100];
+    snprintf(buffer, 100, "% .3e % .3e % .3e   % .3e % .3e   % .3e % .3e",
+        camera_preview.position().x,
+        camera_preview.position().y,
+        camera_preview.position().z,
+        rad2deg(camera_preview.rotation().rot_y()),
+        rad2deg(camera_preview.rotation().rot_z()),
+        rad2deg(camera_preview.field_of_view()),
+        stereo_operator.stereo_offset());
+    out << buffer;
+    return out.str();
+}
+
+
 void FlyingCamera::toggle_stereo3D() {
     stereo3D = !stereo3D;
     std::cout << "Stereo 3D : " << (stereo3D ? "On" : "Off") << "\n";
 }
+
 
 std::string FlyingCamera::get_snapshot_filename() {
     snapshot_counter++;

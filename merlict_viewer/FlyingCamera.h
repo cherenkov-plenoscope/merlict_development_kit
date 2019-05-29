@@ -69,6 +69,7 @@ class FlyingCamera {
     void destroy_display();
     void reset_camera();
     std::string get_snapshot_filename();
+    std::string camera_status()const;
     bool time_to_print_help();
     void acquire_image_with_camera(CameraDevice* cam, Image* img);
 };

@@ -21,6 +21,7 @@ class Stereo3D: public Verbosity {
     void increase_stereo_offset();
     void decrease_stereo_offset();
     void use_same_stereo_offset_as(const Stereo3D *college);
+    double stereo_offset()const;
 
  private:
     CameraDevice* camera;

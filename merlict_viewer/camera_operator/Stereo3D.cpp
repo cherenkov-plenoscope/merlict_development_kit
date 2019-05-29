@@ -74,6 +74,10 @@ void Stereo3D::use_same_stereo_offset_as(
     stereo_offset_in_m = college->stereo_offset_in_m;
 }
 
+double Stereo3D::stereo_offset()const {
+    return stereo_offset_in_m;
+}
+
 }  // namespace camera_operator
 }  // namespace visual
 }  // namespace merlict
